@@ -39,6 +39,8 @@ export class Context {
 }
 
 /** Builds a new empty context for a request. */
-export function buildContext(schema: GraphQLSchema): Context {
+export function buildContext(
+  schema: GraphQLSchema = executableSchema
+): Context {
   return new Context(schema);
 }
