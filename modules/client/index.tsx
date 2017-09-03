@@ -28,9 +28,7 @@ class App extends React.Component<{}, {}> {
   render() {
     return (
       <div>
-        <RedBox>
-          {" "}{this.props.children}
-        </RedBox>
+        <RedBox> {this.props.children}</RedBox>
       </div>
     );
   }

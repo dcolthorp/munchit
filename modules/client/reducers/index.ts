@@ -2,7 +2,7 @@ import * as State from "../state";
 
 import { Action } from "redux";
 import { Lens } from "@atomic-object/lenses";
-import { Arrays } from "@atomic-object/lenses/arrays";
+import { Arrays } from "@atomic-object/lenses/lib/arrays";
 import { ActionTypeKeys, ActionTypes } from "../actions";
 
 const defaultState: State.Type = {

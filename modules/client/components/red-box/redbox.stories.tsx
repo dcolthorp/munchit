@@ -12,7 +12,7 @@ storiesOf("RedBox", module)
   .addWithInfo(
     "Wrapping a button",
     "A simple component which puts a red border around its contents",
-    () =>
+    () => (
       <WithNotes notes="Click the button to see an action">
         <RedBox>
           <button onClick={action("clicked")}>
@@ -20,6 +20,7 @@ storiesOf("RedBox", module)
           </button>
         </RedBox>
       </WithNotes>
+    )
   )
   .add("simple", () => <RedBox>yo</RedBox>);
 // .add("with some emoji", () =>

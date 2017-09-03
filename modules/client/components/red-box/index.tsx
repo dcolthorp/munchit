@@ -6,10 +6,6 @@ export interface Props {}
 
 export class RedBox extends React.Component<Props, {}> {
   render() {
-    return (
-      <div className="red-box">
-        {this.props.children}
-      </div>
-    );
+    return <div className="red-box">{this.props.children}</div>;
   }
 }

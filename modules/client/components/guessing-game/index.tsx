@@ -20,7 +20,8 @@ function presentLastGuess(guess: Guess) {
     guess.status === GuessResult.CORRECT ? "RIGHT" : "WRONG";
   return (
     <p>
-      {" "}{guess.value} was {correctnessDescription}{" "}
+      {" "}
+      {guess.value} was {correctnessDescription}{" "}
     </p>
   );
 }
@@ -29,12 +30,16 @@ function presentLastGuess(guess: Guess) {
 export class GuessingGame extends React.Component<Props, {}> {
   render() {
     const onGuess = this.props.onGuess;
-    const lastGuessDisplay = this.props.lastGuess
-      ? presentLastGuess(this.props.lastGuess)
-      : <p>No guess yet</p>;
-    const congratsDisplay = this.props.showCongratulations
-      ? <h1>Congratulations! You won!</h1>
-      : "";
+    const lastGuessDisplay = this.props.lastGuess ? (
+      presentLastGuess(this.props.lastGuess)
+    ) : (
+      <p>No guess yet</p>
+    );
+    const congratsDisplay = this.props.showCongratulations ? (
+      <h1>Congratulations! You won!</h1>
+    ) : (
+      ""
+    );
 
     return (
       <div className="guessing-game">
@@ -55,9 +60,7 @@ export class GuessingGame extends React.Component<Props, {}> {
         </div>
 
         {lastGuessDisplay}
-        <p>
-          {" "}Current guess is: {this.props.currentGuess.join(", ")}
-        </p>
+        <p> Current guess is: {this.props.currentGuess.join(", ")}</p>
         {this.props.children}
       </div>
     );

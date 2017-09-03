@@ -84,8 +84,5 @@ export function mockProvider(opts?: MockProviderOpts) {
 
 export function mockProviderDecorator(opts?: MockProviderOpts) {
   const Provider = mockProvider(opts);
-  return (story: RenderFunction) =>
-    <Provider>
-      {story()}
-    </Provider>;
+  return (story: RenderFunction) => <Provider>{story()}</Provider>;
 }
