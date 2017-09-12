@@ -6,7 +6,6 @@ const { createLocalInterface } = require("apollo-local-query");
 
 import * as graphql from "graphql";
 
-import { UserRepository } from "../records/user";
 import * as db from "../db";
 
 import { executableSchema } from "./index";
@@ -34,8 +33,7 @@ export class Context {
   apolloClient: ApolloClient;
 
   // TODO: Perhaps compose this in?
-  private conn = db.getConnection();
-  users = new UserRepository(this.conn);
+  protected conn = db.getConnection();
 }
 
 /** Builds a new empty context for a request. */
