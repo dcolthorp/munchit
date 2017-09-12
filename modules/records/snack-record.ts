@@ -30,7 +30,8 @@ const SnackT = recordInfo<UnsavedSnack, SavedSnack, "id">("id");
 
 type SavedR<T extends { _saved: any }> = T["_saved"];
 type UnsavedR<T extends { _unsaved: any }> = T["_unsaved"];
-type IdR<K extends { _id: string }> = K["_id"];
+type IdKeyR<K extends { _id: string }> = K["_id"];
+type IdTypeR<R extends RecordInfo<any, any, any>> = SavedR<R>[IdKeyR<R>];
 function idOf<Id extends string>(recordInfo: { _id: Id }) {
   return recordInfo._id;
 }
@@ -45,15 +46,15 @@ export interface VoteRecord extends RecordBase {
 }
 type _check = AssertAssignable<Snack, SavedR<typeof SnackT>>;
 
-function associationOf<U, S, I extends keyof S>(record: RecordInfo<U, S, I>) {
-  type SourceRecord = SavedR<typeof record>;
-  type Id = IdR<typeof record>;
-  type IdType = SourceRecord[Id];
+function associationOf<DestType>(repo: RepositoryBase<DestType>) {
   return {
-    hasMany<DestType, K extends keyof DestType>(
-      repo: RepositoryBase<DestType>,
+    allBelongingTo<U, S, I extends keyof S, K extends keyof DestType>(
+      record: RecordInfo<U, S, I>,
       foreignKey: K
-    ): Dataloader<SourceRecord | IdType, DestType[]> {
+    ) {
+      type SourceRecord = SavedR<typeof record>;
+      type Id = IdKeyR<typeof record>;
+      type IdType = IdTypeR<typeof record>;
       type FkType = DestType[K];
       return new Dataloader<SourceRecord | IdType, DestType[]>(async args => {
         const ids: IdType[] = args.map(
@@ -68,41 +69,78 @@ function associationOf<U, S, I extends keyof S>(record: RecordInfo<U, S, I>) {
         return ordered;
       });
     },
-
-    hasOne<DestType, K extends keyof DestType>(
-      repo: RepositoryBase<DestType>,
+    oneBelongingTo<U, S, I extends keyof S, K extends keyof DestType>(
+      record: RecordInfo<U, S, I>,
       foreignKey: K
-    ): Dataloader<SourceRecord | IdType, DestType | null> {
-      const manyLoader = this.hasMany(repo, foreignKey);
-      return new Dataloader(async ids => {
-        const sets = await manyLoader.loadMany(ids);
-        return sets.map(e => (e.length > 0 ? e[0] : null));
+    ) {
+      type SourceRecord = SavedR<typeof record>;
+      type Id = IdKeyR<typeof record>;
+      type IdType = IdTypeR<typeof record>;
+      type FkType = DestType[K];
+      return new Dataloader<SourceRecord | IdType, DestType>(async args => {
+        const ids: IdType[] = args.map(
+          arg =>
+            typeof arg === "object"
+              ? (arg as SourceRecord)[record._id] as IdType
+              : arg
+        );
+        const records = await repo.table().whereIn(foreignKey, ids as any[]);
+        const table = groupBy<DestType>(records, foreignKey);
+        const ordered = ids.map(id => table[(id as any).toString()][0]);
+        return ordered;
       });
     }
   };
 }
 
-// function association<SourceRecord>() {
+// function associationOf<U, S, I extends keyof S>(record: RecordInfo<U, S, I>) {
+//   type SourceRecord = SavedR<typeof record>;
+//   type Id = IdKeyR<typeof record>;
+//   type IdType = SourceRecord[Id];
 //   return {
-//     hasMany<DestType extends RecordBase, S extends keyof DestType>(
+//     hasMany<DestType, K extends keyof DestType>(
 //       repo: RepositoryBase<DestType>,
-//       columnName: S
-//     ): Dataloader<SourceRecord | Saved<SourceRecord>["id"], Saved<DestType>[]> {
-//       return new Dataloader<
-//         Saved<SourceRecord> | Saved<SourceRecord>["id"],
-//         Saved<DestType>[]
-//       >(async args => {
-//         const ids = args.map(arg => (typeof arg === "object" ? arg.id : arg));
-//         const records = await repo.table().whereIn("id", ids);
-//         const table = keyBy<any>(records, "id");
-//         return ids.map(id => table[id]);
+//       foreignKey: K
+//     ): Dataloader<SourceRecord | IdType, DestType[]> {
+//       type FkType = DestType[K];
+//       return new Dataloader<SourceRecord | IdType, DestType[]>(async args => {
+//         const ids: IdType[] = args.map(
+//           arg =>
+//             typeof arg === "object"
+//               ? (arg as SourceRecord)[record._id] as IdType
+//               : arg
+//         );
+//         const records = await repo.table().whereIn(foreignKey, ids as any[]);
+//         const table = groupBy<DestType>(records, foreignKey);
+//         const ordered = ids.map(id => table[(id as any).toString()]);
+//         return ordered;
 //       });
-//     }
+//     },
+
+//     // hasOne<DestType, K extends keyof DestType>(
+//     //   repo: RepositoryBase<DestType>,
+//     //   foreignKey: K
+//     // ): Dataloader<SourceRecord | IdType, DestType | null> {
+//     //   const manyLoader = this.hasMany(repo, foreignKey);
+//     //   return new Dataloader(async ids => {
+//     //     const sets = await manyLoader.loadMany(ids);
+//     //     return sets.map(e => (e.length > 0 ? e[0] : null));
+//     //   });
+//     // }
 //   };
 // }
+
+// votes have snackId
+// (snack) => vote[]
+// vote allBelongingTo snack
+// (snack) => vote
+// vote oneBelongingTo snack
+// (vote) => snack
+// snack owning vote
 
 export class SnackRepository extends RepositoryBase<SnackRecord>("snacks") {}
 
 export class VoteRepository extends RepositoryBase<VoteRecord>("votes") {
-  forSnack = associationOf(SnackT).hasMany(this, "snackId");
+  // forSnack = associationOf(SnackT).hasMany(this, "snackId");
+  forSnack2 = associationOf(this).allBelongingTo(SnackT, "snackId");
 }
