@@ -3,23 +3,19 @@ import * as DataLoader from "dataloader";
 
 import keyBy from "lodash-es/keyBy";
 
+export type RecordId = number;
+
 /** Base type for records assumes an incrementing id */
-export interface RecordBase {
-  id?: number;
-}
+export interface RecordBase {}
 
 /** A Saved<Record> is a record that is from the database and therefore must have an id */
 export type Saved<T extends RecordBase> = T & {
-  id: number;
+  id: RecordId;
 };
 
-export class RepositoryBase<T extends RecordBase> {
-  protected tableName: string;
-  private db: Knex;
-
-  constructor(db: Knex) {
-    this.db = db;
-  }
+abstract class TableHelpers<T extends RecordBase> {
+  abstract tableName: string;
+  protected abstract db: Knex;
 
   table() {
     return this.db.table(this.tableName);
@@ -39,4 +35,21 @@ export class RepositoryBase<T extends RecordBase> {
     const byId = keyBy(rows, "id");
     return ids.map(id => byId[id]);
   });
+}
+
+export interface RepositoryBase<T> extends TableHelpers<T> {
+  readonly tableName: string;
+}
+
+export function RepositoryBase<T extends RecordBase>(tableName2: string) {
+  return class RepositoryBase extends TableHelpers<T> {
+    static readonly tableName = tableName2;
+    public readonly tableName: string;
+    protected db: Knex;
+
+    constructor(db: Knex) {
+      super();
+      this.db = db;
+    }
+  };
 }
