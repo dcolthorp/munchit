@@ -4,10 +4,15 @@ import * as DataLoader from "dataloader";
 import keyBy from "lodash-es/keyBy";
 import groupBy from "lodash-es/groupBy";
 
+/** This interface is used as a marker simply to make an Id<SomeType> not compatible with Id<OtherType> */
+interface IdBrand<T> {
+  _type?: T;
+}
+
 /** This type is just a number representing a database ID that tracks the type of the source. */
-export type NumberId<T> = number & { _type?: T };
+export type NumberId<T> = number & IdBrand<T>;
 /** This type is just a string representing a database ID that tracks the type of the source. */
-export type StringId<T> = string & { _type?: T };
+export type StringId<T> = string & IdBrand<T>;
 
 export interface RecordInfo<Unsaved, Saved, Id extends keyof Saved> {
   _saved: Saved;
@@ -31,20 +36,27 @@ export function recordInfo<Unsaved, Saved, Id extends keyof Saved>(
 export function recordInfo(tableName: string, idKey?: string) {
   return { tableName, idKey: idKey || "id" } as any;
 }
+/** Extract the static type of a saved record from a RecordInfo */
 export type SavedR<T extends { _saved: any }> = T["_saved"];
+/** Extract the static type of a unsaved record from a RecordInfo */
 export type UnsavedR<T extends { _unsaved: any }> = T["_unsaved"];
+/** Extract the static ID key type (e.g. 'id') from a RecordInfo*/
 export type IdKeyR<K extends { idKey: string }> = K["idKey"];
+/** Extract the static type of the id of a record from a RecordInfo*/
 export type IdTypeR<R extends RecordInfo<any, any, any>> = SavedR<R>[IdKeyR<R>];
+/** Extract the runtime key name from a recordInfo */
 export function idKeyOf<Id extends string>(recordInfo: { idKey: Id }) {
   return recordInfo.idKey;
 }
 
+/** Factory to construct a DataLoader for associations returning the destination type handled by the passed in repostory */
 export function associationOf<
   UnsavedDestType,
   SavedDestType,
   DestId extends keyof SavedDestType
 >(repo: RepositoryBase<UnsavedDestType, SavedDestType, DestId>) {
   return {
+    /** Analogous to has_many in Rails */
     allBelongingTo<
       UnsavedSourceT,
       SavedSourceT,
@@ -73,6 +85,7 @@ export function associationOf<
       });
     },
 
+    /** Analogous to has_one in Rails */
     oneBelongingTo<
       SourceRecordInfo extends RecordInfo<any, any, any>,
       ForeignKey extends keyof SavedDestType
@@ -96,6 +109,7 @@ export function associationOf<
       });
     },
 
+    /** Analogous to belongs_to in Rails */
     owning<
       UnsavedSource,
       SavedSource,
@@ -126,11 +140,10 @@ export function associationOf<
 
 abstract class TableHelpers<UnsavedR, SavedR, IdKeyT extends keyof SavedR> {
   abstract recordType: RecordInfo<UnsavedR, SavedR, IdKeyT>;
-  abstract tableName: string;
   protected abstract db: Knex;
 
   table() {
-    return this.db.table(this.tableName);
+    return this.db.table(this.recordType.tableName);
   }
 
   prepToCreate(unsaved: UnsavedR): Partial<SavedR> {
