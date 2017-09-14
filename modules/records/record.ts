@@ -50,12 +50,25 @@ export function idKeyOf<Id extends string>(recordInfo: { idKey: Id }) {
 }
 
 /** Factory to construct a DataLoader for associations returning the destination type handled by the passed in repostory */
-export function associationOf<
+export function loaderOf<
   UnsavedDestType,
   SavedDestType,
   DestId extends keyof SavedDestType
 >(repo: RepositoryBase<UnsavedDestType, SavedDestType, DestId>) {
   return {
+    finderBy<K extends keyof SavedDestType>(targetKey: K) {
+      return new DataLoader<
+        SavedDestType[K],
+        SavedDestType | null
+      >(async keyValues => {
+        const entries: SavedDestType[] = await repo
+          .table()
+          .whereIn(targetKey, keyValues as any);
+        const table = keyBy(entries, targetKey);
+        return keyValues.map(val => table[val.toString()] || null);
+      });
+    },
+
     /** Analogous to has_many in Rails */
     allBelongingTo<
       UnsavedSourceT,
@@ -80,7 +93,7 @@ export function associationOf<
         );
         const records = await repo.table().whereIn(foreignKey, ids as any[]);
         const table = groupBy<SavedDestType>(records, foreignKey);
-        const ordered = ids.map(id => table[(id as any).toString()]);
+        const ordered = ids.map(id => table[(id as any).toString()] || []);
         return ordered;
       });
     },
@@ -160,6 +173,10 @@ abstract class TableHelpers<UnsavedR, SavedR, IdKeyT extends keyof SavedR> {
 
   async all(): Promise<SavedR[]> {
     return await this.table();
+  }
+
+  async count(): Promise<number> {
+    return await this.table().count();
   }
 
   findById = new DataLoader<SavedR[IdKeyT], SavedR | undefined>(async ids => {

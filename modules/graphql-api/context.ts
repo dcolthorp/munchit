@@ -9,6 +9,8 @@ import * as graphql from "graphql";
 import * as db from "../db";
 
 import { executableSchema } from "./index";
+import { SnackRepository } from "records/snack-record";
+import { VoteRepository } from "records/vote-record";
 
 export function buildLocalApollo(schema: GraphQLSchema = executableSchema) {
   return new Context().apolloClient;
@@ -33,7 +35,9 @@ export class Context {
   apolloClient: ApolloClient;
 
   // TODO: Perhaps compose this in?
-  protected conn = db.getConnection();
+  pg = db.getConnection();
+  snackRepository = new SnackRepository(this.pg);
+  voteRepository = new VoteRepository(this.pg);
 }
 
 /** Builds a new empty context for a request. */

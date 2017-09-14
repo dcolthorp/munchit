@@ -1,5 +1,0 @@
-query Answer {
-  game {
-    answer
-  }
-}

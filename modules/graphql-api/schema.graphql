@@ -1,16 +1,20 @@
-type User {
+type Snack {
   id: Int!
   name: String!
-  email: String!
+  voteCount: Int!
 }
 
-type Game {
-  answer: [Int!]!
+type Vote {
+  id: Int!
+  createdAtIso8601: String!
+  snack: Snack!
 }
 
 type Query {
-  allUsers: [User]!
-  userById(id: Int!): User
+  allSnacks: [Snack]
+}
 
-  game: Game!
+type Mutation {
+  addSnack(name: String!): Snack
+  voteFor(snackId: Int!): Vote
 }

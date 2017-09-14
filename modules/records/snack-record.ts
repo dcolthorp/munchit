@@ -1,13 +1,17 @@
-import {
-  RepositoryBase,
-  associationOf,
-  SavedR,
-  UnsavedR
-} from "./record";
-import { SnackRecord, VoteRecord } from "records/types";
+import { RepositoryBase, loaderOf, NumberId } from "./record";
 
-export type UnsavedSnack = UnsavedR<typeof SnackRecord>;
-export type Snack = SavedR<typeof SnackRecord>;
+import { SnackRecord, VoteRecord } from "records/record-infos";
+
+export type SnackId = NumberId<SavedSnack>;
+
+export interface UnsavedSnack {
+  name: string;
+}
+export interface SavedSnack extends UnsavedSnack {
+  id: NumberId<SavedSnack>;
+}
+
 export class SnackRepository extends RepositoryBase(SnackRecord) {
-  forVote = associationOf(this).owning(VoteRecord, "snackId");
+  forVote = loaderOf(this).owning(VoteRecord, "snackId");
+  byName = loaderOf(this).finderBy("name");
 }

@@ -10,7 +10,10 @@ exports.up = async function(knex: Knex) {
   });
   await knex.schema.createTable("votes", table => {
     table.increments("id");
-    table.integer("snackId").notNullable();
+    table
+      .integer("snackId")
+      .notNullable()
+      .index();
     table.foreign("snackId").references("snacks.id");
     table
       .dateTime("createdAt")

@@ -1,21 +1,30 @@
 /* tslint:disable */
 
 export interface Query {
-  allUsers: Array<User>;
-  userById: User | null;
-  game: Game;
+  allSnacks: Array<Snack> | null;
 }
 
-export interface UserByIdQueryArgs {
-  id: number;
-}
-
-export interface User {
+export interface Snack {
   id: number;
   name: string;
-  email: string;
+  voteCount: number;
 }
 
-export interface Game {
-  answer: Array<number>;
+export interface Mutation {
+  addSnack: Snack | null;
+  voteFor: Vote | null;
+}
+
+export interface AddSnackMutationArgs {
+  name: string;
+}
+
+export interface VoteForMutationArgs {
+  snackId: number;
+}
+
+export interface Vote {
+  id: number;
+  createdAtIso8601: string;
+  snack: Snack;
 }

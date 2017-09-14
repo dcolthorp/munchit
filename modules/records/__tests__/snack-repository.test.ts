@@ -1,26 +1,7 @@
 import { SnackRepository } from "records/snack-record";
-import { getConnection, destroyConnection, Knex } from "db";
+import { getConnection, destroyConnection } from "db";
 import { VoteRepository } from "records/vote-record";
-
-async function truncateAll(knex: Knex) {
-  const result = await knex.raw(`
-      SELECT table_name
-      FROM information_schema.tables
-      WHERE table_schema='public'
-      AND table_type='BASE TABLE';
-   `);
-  const tables: string[] = result.rows.map((r: any) => r.table_name);
-  const recordTables = tables.filter(t => !t.includes("knex"));
-
-  const promises = recordTables.map(tableName => {
-    try {
-      return knex.raw(`TRUNCATE ${tableName} CASCADE`);
-    } catch (e) {
-      console.error(e);
-    }
-  });
-  await Promise.all(promises);
-}
+import { truncateAll } from "__tests__/db-helpers";
 
 describe("SnackRepository", () => {
   const knex = getConnection();
@@ -35,17 +16,33 @@ describe("SnackRepository", () => {
     expect(snack.id).not.toBeFalsy();
 
     const lookedUpSnack = await snackRepo.findById.load(snack.id);
-
     if (!lookedUpSnack) throw "couldn't find snack";
     expect(lookedUpSnack.id).toEqual(snack.id);
+
+    const byName = await snackRepo.byName.load("Foo");
+    if (!byName) throw "couldn't find snack";
+    expect(byName.id).toEqual(snack.id);
   });
 
   it("Can find the votes for a snack", async () => {
     const snack = await snackRepo.insert({ name: "Bar" });
-    const vote = await voteRepo.insert({ snackId: snack.id });
+    await voteRepo.insert({ snackId: snack.id });
 
     const votesOfSnack = await voteRepo.allForSnack.load(snack);
     expect(votesOfSnack.length).toEqual(1);
+
+    const count = await voteRepo.countForSnack.load(snack.id);
+    expect(count).toEqual(1);
+  });
+
+  it("Returns an empty array if there's no votes for the snack", async () => {
+    const snack = await snackRepo.insert({ name: "Bar2" });
+
+    const votesOfSnack = await voteRepo.allForSnack.load(snack);
+    expect(votesOfSnack.length).toEqual(0);
+
+    const count = await voteRepo.countForSnack.load(snack.id);
+    expect(count).toEqual(0);
   });
 
   it("Can find the snack for a vote", async () => {
