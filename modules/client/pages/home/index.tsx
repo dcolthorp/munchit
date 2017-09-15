@@ -1,10 +1,13 @@
 import { HomePageUI, HomePageUIProps } from "client/pages/home/home-page-ui";
 import graphql from "react-apollo/graphql";
-import {
-  DashboardSnacksQuery,
-  VoteForSnackMutation,
-  VoteForSnackMutationVariables
-} from "client/graphql-types";
+import { DashboardSnacksQuery } from "client/graphql-types";
+import { withApollo } from "react-apollo";
+import { voteForSnackMutation } from "client/graphql-mutations/vote-for-snack-mutation";
+import { ApolloClient } from "apollo-client";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+
+import partial from "lodash-es/partial";
 
 type SnacksQueryProps = Pick<HomePageUIProps, "snacks">;
 const fetchSnacks = graphql<
@@ -13,7 +16,7 @@ const fetchSnacks = graphql<
   SnacksQueryProps
 >(require("client/graphql-queries/DashboardSnacks.graphql"), {
   options(props) {
-    // Always refetch this query when the page is loaded
+    // Always refetch this query when the page is loaded (component is mounted)
     return { fetchPolicy: "cache-and-network" };
   },
   props(result): SnacksQueryProps {
@@ -29,38 +32,21 @@ const fetchSnacks = graphql<
   }
 });
 
-const withVoteMutation = graphql<
-  VoteForSnackMutation,
-  SnacksQueryProps,
-  HomePageUIProps
->(require("client/graphql-mutations/VoteForSnack.graphql"), {
-  props(result): HomePageUIProps {
-    const { snacks } = result.ownProps;
-    return {
-      snacks,
-      onVote: snack => {
-        if (result.mutate) {
-          result.mutate({
-            variables: {
-              snackId: snack.id
-            } as VoteForSnackMutationVariables,
+type WithApolloProps = { client: ApolloClient };
 
-            optimisticResponse: {
-              voteFor: {
-                __typename: "Vote",
-                id: -1,
-                snack: {
-                  __typename: "Snack",
-                  id: snack.id,
-                  voteCount: snack.voteCount + 1
-                }
-              }
-            } as VoteForSnackMutation
-          });
-        }
-      }
-    };
-  }
-});
+type ConnectProps = SnacksQueryProps & WithApolloProps;
+type DispatchProps = Pick<HomePageUIProps, "onVote">;
 
-export const HomePage = fetchSnacks(withVoteMutation(HomePageUI));
+function mapDispatchToProps(
+  dispatch: Dispatch<any>,
+  ownProps: ConnectProps
+): DispatchProps {
+  const { client } = ownProps;
+  return {
+    onVote: partial(voteForSnackMutation, client)
+  };
+}
+
+const withEvents = connect(undefined, mapDispatchToProps);
+
+export const HomePage = fetchSnacks(withApollo(withEvents(HomePageUI)));

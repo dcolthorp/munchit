@@ -1,5 +1,6 @@
 import * as React from "react";
-import { SchemaMap, rawSchema } from "graphql-api/schema-base";
+import { rawSchema } from "graphql-api/schema-base";
+
 import {
   makeExecutableSchema,
   addMockFunctionsToSchema,
@@ -18,6 +19,7 @@ import { Reducer } from "redux";
 import { createStore } from "redux";
 import { RenderFunction } from "@storybook/react";
 import { MemoryRouter } from "react-router";
+import { SchemaMap } from "graphql-api";
 type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 type MockDefinitions<T> = {
   [K in keyof T]?: ((

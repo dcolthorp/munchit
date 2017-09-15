@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
     "baseUrl": "./modules",
     "jsx": "react",
     "module": "es2015",
