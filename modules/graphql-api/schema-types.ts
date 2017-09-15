@@ -1,7 +1,7 @@
 /* tslint:disable */
 
 export interface Query {
-  allSnacks: Array<Snack> | null;
+  allSnacks: Array<Snack>;
 }
 
 export interface Snack {
@@ -25,6 +25,5 @@ export interface VoteForMutationArgs {
 
 export interface Vote {
   id: number;
-  createdAtIso8601: string;
   snack: Snack;
 }

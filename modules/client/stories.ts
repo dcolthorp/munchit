@@ -9,5 +9,6 @@ declare module "@storybook/react" {
   }
 }
 
-import "./components/red-box/redbox.stories";
-import "./containers/answer-display/answer-display.stories";
+import "./styles/main.scss";
+
+import "./components/snack-voter/snack-voter.stories";

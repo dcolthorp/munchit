@@ -1,5 +1,6 @@
 import { Context } from "graphql-api";
 import { MinimalSnack } from "graphql-api/resolvers/snack";
+import sortBy from "lodash-es/sortBy";
 
 export const QueryResolvers = {
   async allSnacks(
@@ -7,6 +8,7 @@ export const QueryResolvers = {
     args: {},
     context: Context
   ): Promise<MinimalSnack[]> {
-    return await context.snackRepository.all();
+    const snacks = await context.snackRepository.all();
+    return sortBy(snacks, "name");
   }
 };

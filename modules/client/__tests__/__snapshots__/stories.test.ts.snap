@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Component – SnackVoter Basic example 1`] = `
+<ul>
+  <li>
+    Guacamole
+      (popularity: 
+    100
+    %) 
+    <a
+      onClick={[Function]}
+    >
+      Vote
+    </a>
+  </li>
+  <li>
+    Cheese platter
+      (popularity: 
+    33
+    %) 
+    <a
+      onClick={[Function]}
+    >
+      Vote
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Storyshots Component – SnackVoter No snacks 1`] = `
+<ul>
+  <li>
+    There are no snacks in the system
+  </li>
+</ul>
+`;
+
+exports[`Storyshots Component – SnackVoter No votes 1`] = `
+<ul>
+  <li>
+    Guacamole
+      (popularity: 
+    100
+    %) 
+    <a
+      onClick={[Function]}
+    >
+      Vote
+    </a>
+  </li>
+  <li>
+    Cheese platter
+      (popularity: 
+    100
+    %) 
+    <a
+      onClick={[Function]}
+    >
+      Vote
+    </a>
+  </li>
+</ul>
+`;

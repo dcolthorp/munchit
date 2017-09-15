@@ -6,12 +6,11 @@ type Snack {
 
 type Vote {
   id: Int!
-  createdAtIso8601: String!
   snack: Snack!
 }
 
 type Query {
-  allSnacks: [Snack]
+  allSnacks: [Snack!]
 }
 
 type Mutation {
