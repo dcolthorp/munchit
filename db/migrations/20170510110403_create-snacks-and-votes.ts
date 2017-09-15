@@ -14,7 +14,10 @@ exports.up = async function(knex: Knex) {
       .integer("snackId")
       .notNullable()
       .index();
-    table.foreign("snackId").references("snacks.id");
+    table
+      .foreign("snackId")
+      .references("snacks.id")
+      .onDelete("CASCADE");
     table
       .dateTime("createdAt")
       .notNullable()

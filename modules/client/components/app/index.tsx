@@ -5,10 +5,13 @@ require("./styles.scss");
 export function AppHeader() {
   return (
     <div className="munchit-app-header">
-      <h1>Munchit</h1>
-      <ul>
+      <h1 className="munchit-app-title">Munchit</h1>
+      <ul className="munchit-app-nav">
         <li>
           <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/add-snack">Add Snack</Link>
         </li>
       </ul>
     </div>

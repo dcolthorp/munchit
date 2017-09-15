@@ -2,13 +2,13 @@ import { RepositoryBase, loaderOf, NumberId } from "./record";
 
 import { SnackRecord, VoteRecord } from "records/record-infos";
 
-export type SnackId = NumberId<SavedSnack>;
+export type SnackId = NumberId<Snack>;
 
 export interface UnsavedSnack {
   name: string;
 }
-export interface SavedSnack extends UnsavedSnack {
-  id: NumberId<SavedSnack>;
+export interface Snack extends UnsavedSnack {
+  id: NumberId<Snack>;
 }
 
 export class SnackRepository extends RepositoryBase(SnackRecord) {

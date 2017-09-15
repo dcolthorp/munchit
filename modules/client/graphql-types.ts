@@ -1,6 +1,18 @@
 /* tslint:disable */
 //  This file was automatically generated and should not be edited.
 
+export type AddSnackMutationVariables = {
+  name: string;
+};
+
+export type AddSnackMutation = {
+  addSnack: {
+    id: number;
+    name: string;
+    voteCount: number;
+  } | null;
+};
+
 export type VoteForSnackMutationVariables = {
   snackId: number;
 };
