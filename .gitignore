@@ -83,7 +83,6 @@ client/tests/**/*.jsx
 
 # .env
 .env
-.vscode
 
 # Generated schema used in typescript type generation
 modules/graphql-api/schema.json
