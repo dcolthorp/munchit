@@ -22,8 +22,17 @@ function mapDispatchToProps(
 }
 
 type CompletedForm = { [k in AddSnackFields]: string };
-type FormState = { form: { [k in AddSnackFields]?: string } };
+type InProgressForm = { [k in AddSnackFields]?: string };
+type FormState = { form: InProgressForm };
 type FormProps = { onSubmit: (form: CompletedForm) => void };
+
+function isComplete(form: InProgressForm): form is CompletedForm {
+  const vals = form as any;
+  return Object.values(AddSnackFields).every(
+    x => vals[x] && /\S/.test(vals[x])
+  );
+}
+
 class ManagedForm extends React.Component<FormProps, FormState> {
   constructor(props: FormProps) {
     super();
@@ -35,10 +44,9 @@ class ManagedForm extends React.Component<FormProps, FormState> {
   };
 
   onSubmit = () => {
-    const vals = this.state.form as any;
-    const ready = Object.values(AddSnackFields).every(x => vals[x]);
-    if (ready) {
-      this.props.onSubmit(this.state.form as CompletedForm);
+    const form = this.state.form;
+    if (isComplete(form)) {
+      this.props.onSubmit(form);
       this.setState({ form: {} });
     } else {
       alert("Finish the form");
@@ -47,7 +55,6 @@ class ManagedForm extends React.Component<FormProps, FormState> {
 
   render() {
     const { form } = this.state;
-    console.log(form);
     const uiProps: AddSnackUIProps = {
       onSave: this.onSubmit,
       onFieldChanged: this.update,
