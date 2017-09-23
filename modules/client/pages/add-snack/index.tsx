@@ -21,8 +21,8 @@ function mapDispatchToProps(
   };
 }
 
-type CompletedForm = { [k in AddSnackFields]: string };
-type InProgressForm = { [k in AddSnackFields]?: string };
+type CompletedForm = { readonly [k in AddSnackFields]: string };
+type InProgressForm = Partial<CompletedForm>;
 type FormState = { form: InProgressForm };
 type FormProps = { onSubmit: (form: CompletedForm) => void };
 

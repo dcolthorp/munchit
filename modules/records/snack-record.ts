@@ -13,5 +13,5 @@ export interface Snack extends UnsavedSnack {
 
 export class SnackRepository extends RepositoryBase(SnackRecord) {
   forVote = loaderOf(this).owning(VoteRecord, "snackId");
-  byName = loaderOf(this).finderBy("name");
+  byName = loaderOf(this).findOneBy("name");
 }

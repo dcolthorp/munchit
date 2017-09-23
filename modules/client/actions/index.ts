@@ -13,21 +13,10 @@ interface ActionBuilder<T> {
 }
 
 export enum ActionTypeKeys {
-  ANSWER_CHANGED = "ANSWER_CHANGED",
-  GUESS_SUBMITTED = "GUESS_SUBMITTED",
-  GOOD_GUESS_OCCURRED = "GOOD_GUESS_OCCURRED",
-  BAD_GUESS_OCCURRED = "BAD_GUESS_OCCURRED",
-  GAME_WON = "GAME_WON",
   OTHER_ACTION = "fake"
 }
 
-export type ActionTypes =
-  | AnswerChangedAction
-  | GuessSubmittedAction
-  | GoodGuessOccurredAction
-  | BadGuessOccurredAction
-  | GameWonAction
-  | OtherAction;
+export type ActionTypes = OtherAction;
 
 /** Creates an action builder for a given action type which arguments that are mapped to the properties of the action.
  * 
@@ -51,50 +40,6 @@ export function actionBuilder<T extends { type: ActionTypeKeys }>(
     };
   };
 }
-
-export type AnswerChangedAction = {
-  readonly type: ActionTypeKeys.ANSWER_CHANGED;
-  readonly answer: number[];
-};
-export const answerChanged = actionBuilder<AnswerChangedAction>(
-  ActionTypeKeys.ANSWER_CHANGED
-)("answer");
-
-export type GuessSubmittedAction = {
-  readonly type: ActionTypeKeys.GUESS_SUBMITTED;
-  readonly value: number;
-};
-export const guessSubmitted = actionBuilder<GuessSubmittedAction>(
-  ActionTypeKeys.GUESS_SUBMITTED
-)("value");
-
-export type GoodGuessOccurredAction = {
-  readonly type: ActionTypeKeys.GOOD_GUESS_OCCURRED;
-  readonly value: number;
-};
-
-export const goodGuessOccurred = actionBuilder<GoodGuessOccurredAction>(
-  ActionTypeKeys.GOOD_GUESS_OCCURRED
-)("value");
-
-export type BadGuessOccurredAction = {
-  readonly type: ActionTypeKeys.BAD_GUESS_OCCURRED;
-  readonly value: number;
-};
-
-export const badGuessOccurred = actionBuilder<BadGuessOccurredAction>(
-  ActionTypeKeys.BAD_GUESS_OCCURRED
-)("value");
-
-export type GameWonAction = {
-  readonly type: ActionTypeKeys.GAME_WON;
-  readonly correctAnswer: number[];
-};
-
-export const gameWon = actionBuilder<GameWonAction>(ActionTypeKeys.GAME_WON)(
-  "correctAnswer"
-);
-
 export type OtherAction = {
   readonly type: ActionTypeKeys.OTHER_ACTION;
 };

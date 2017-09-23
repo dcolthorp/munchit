@@ -49,106 +49,109 @@ export function idKeyOf<Id extends string>(recordInfo: { idKey: Id }) {
   return recordInfo.idKey;
 }
 
+class LoaderFactory<
+  UnsavedDestType,
+  SavedDestType,
+  DestId extends keyof SavedDestType
+> {
+  constructor(
+    private repo: RepositoryBase<UnsavedDestType, SavedDestType, DestId>
+  ) {}
+  findOneBy<K extends keyof SavedDestType>(targetKey: K) {
+    return new DataLoader<
+      SavedDestType[K],
+      SavedDestType | null
+    >(async keyValues => {
+      const entries: SavedDestType[] = await this.repo
+        .table()
+        .whereIn(targetKey, keyValues as any);
+      const table = keyBy(entries, targetKey);
+      return keyValues.map(val => table[val.toString()] || null);
+    });
+  }
+
+  /** Analogous to has_many in Rails */
+  allBelongingTo<
+    UnsavedSourceT,
+    SavedSourceT,
+    SourceId extends keyof SavedSourceT,
+    K extends keyof SavedDestType
+  >(record: RecordInfo<UnsavedSourceT, SavedSourceT, SourceId>, foreignKey: K) {
+    type SourceRecord = SavedR<typeof record>;
+    type IdType = IdTypeR<typeof record>;
+    return new DataLoader<
+      SourceRecord | IdType,
+      SavedDestType[]
+    >(async args => {
+      const ids: IdType[] = args.map(
+        arg =>
+          typeof arg === "object"
+            ? (arg as SourceRecord)[record.idKey] as IdType
+            : arg
+      );
+      const records = await this.repo.table().whereIn(foreignKey, ids as any[]);
+      const table = groupBy<SavedDestType>(records, foreignKey);
+      const ordered = ids.map(id => table[(id as any).toString()] || []);
+      return ordered;
+    });
+  }
+
+  /** Analogous to has_one in Rails */
+  oneBelongingTo<
+    SourceRecordInfo extends RecordInfo<any, any, any>,
+    ForeignKey extends keyof SavedDestType
+  >(record: SourceRecordInfo, foreignKey: ForeignKey) {
+    type SourceRecord = SavedR<typeof record>;
+    type FkType = SavedDestType[ForeignKey];
+    return new DataLoader<SourceRecord | FkType, SavedDestType>(async args => {
+      const ids: FkType[] = args.map(
+        arg =>
+          typeof arg === "object"
+            ? (arg as SourceRecord)[record.idKey] as FkType
+            : arg
+      );
+      const records = await this.repo.table().whereIn(foreignKey, ids as any[]);
+      const table = keyBy<SavedDestType>(records, foreignKey);
+      const ordered = ids.map(id => table[(id as any).toString()]);
+      return ordered;
+    });
+  }
+
+  /** Analogous to belongs_to in Rails */
+  owning<
+    UnsavedSource,
+    SavedSource,
+    SourceIdKey extends keyof SavedSource,
+    ForeignKey extends keyof SavedSource
+  >(
+    record: RecordInfo<UnsavedSource, SavedSource, SourceIdKey>,
+    sourceKey: ForeignKey
+  ) {
+    type FkType = SavedSource[ForeignKey];
+    return new DataLoader<SavedSource | FkType, SavedDestType>(async args => {
+      const ids: FkType[] = args.map(
+        arg =>
+          typeof arg === "object"
+            ? (arg as SavedSource)[sourceKey] as FkType
+            : arg
+      );
+      const records = await this.repo
+        .table()
+        .whereIn(idKeyOf(record), ids as any[]);
+      const table = keyBy<SavedDestType>(records, idKeyOf(record));
+      const ordered = ids.map(id => table[(id as any).toString()]);
+      return ordered;
+    });
+  }
+}
+
 /** Factory to construct a DataLoader for associations returning the destination type handled by the passed in repostory */
 export function loaderOf<
   UnsavedDestType,
   SavedDestType,
   DestId extends keyof SavedDestType
 >(repo: RepositoryBase<UnsavedDestType, SavedDestType, DestId>) {
-  return {
-    finderBy<K extends keyof SavedDestType>(targetKey: K) {
-      return new DataLoader<
-        SavedDestType[K],
-        SavedDestType | null
-      >(async keyValues => {
-        const entries: SavedDestType[] = await repo
-          .table()
-          .whereIn(targetKey, keyValues as any);
-        const table = keyBy(entries, targetKey);
-        return keyValues.map(val => table[val.toString()] || null);
-      });
-    },
-
-    /** Analogous to has_many in Rails */
-    allBelongingTo<
-      UnsavedSourceT,
-      SavedSourceT,
-      SourceId extends keyof SavedSourceT,
-      K extends keyof SavedDestType
-    >(
-      record: RecordInfo<UnsavedSourceT, SavedSourceT, SourceId>,
-      foreignKey: K
-    ) {
-      type SourceRecord = SavedR<typeof record>;
-      type IdType = IdTypeR<typeof record>;
-      return new DataLoader<
-        SourceRecord | IdType,
-        SavedDestType[]
-      >(async args => {
-        const ids: IdType[] = args.map(
-          arg =>
-            typeof arg === "object"
-              ? (arg as SourceRecord)[record.idKey] as IdType
-              : arg
-        );
-        const records = await repo.table().whereIn(foreignKey, ids as any[]);
-        const table = groupBy<SavedDestType>(records, foreignKey);
-        const ordered = ids.map(id => table[(id as any).toString()] || []);
-        return ordered;
-      });
-    },
-
-    /** Analogous to has_one in Rails */
-    oneBelongingTo<
-      SourceRecordInfo extends RecordInfo<any, any, any>,
-      ForeignKey extends keyof SavedDestType
-    >(record: SourceRecordInfo, foreignKey: ForeignKey) {
-      type SourceRecord = SavedR<typeof record>;
-      type FkType = SavedDestType[ForeignKey];
-      return new DataLoader<
-        SourceRecord | FkType,
-        SavedDestType
-      >(async args => {
-        const ids: FkType[] = args.map(
-          arg =>
-            typeof arg === "object"
-              ? (arg as SourceRecord)[record.idKey] as FkType
-              : arg
-        );
-        const records = await repo.table().whereIn(foreignKey, ids as any[]);
-        const table = keyBy<SavedDestType>(records, foreignKey);
-        const ordered = ids.map(id => table[(id as any).toString()]);
-        return ordered;
-      });
-    },
-
-    /** Analogous to belongs_to in Rails */
-    owning<
-      UnsavedSource,
-      SavedSource,
-      SourceIdKey extends keyof SavedSource,
-      ForeignKey extends keyof SavedSource
-    >(
-      record: RecordInfo<UnsavedSource, SavedSource, SourceIdKey>,
-      sourceKey: ForeignKey
-    ) {
-      type FkType = SavedSource[ForeignKey];
-      return new DataLoader<SavedSource | FkType, SavedDestType>(async args => {
-        const ids: FkType[] = args.map(
-          arg =>
-            typeof arg === "object"
-              ? (arg as SavedSource)[sourceKey] as FkType
-              : arg
-        );
-        const records = await repo
-          .table()
-          .whereIn(idKeyOf(record), ids as any[]);
-        const table = keyBy<SavedDestType>(records, idKeyOf(record));
-        const ordered = ids.map(id => table[(id as any).toString()]);
-        return ordered;
-      });
-    }
-  };
+  return new LoaderFactory<UnsavedDestType, SavedDestType, DestId>(repo);
 }
 
 abstract class TableHelpers<UnsavedR, SavedR, IdKeyT extends keyof SavedR> {
