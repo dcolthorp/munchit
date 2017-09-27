@@ -12,3 +12,6 @@ declare module "@storybook/react" {
 import "./styles/main.scss";
 
 import "./components/snack-voter/snack-voter.stories";
+
+import "./pages/home/home-page-ui.stories";
+import "./pages/add-snack/add-snack-ui.stories";
