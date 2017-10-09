@@ -8,9 +8,9 @@ export enum PopularityMode {
 }
 
 interface State {
-  router: RouterState;
-  apollo: ApolloStore;
-  popularityMode: PopularityMode;
+  readonly router: RouterState;
+  readonly apollo: ApolloStore;
+  readonly popularityMode: PopularityMode;
 }
 export type Type = State;
 

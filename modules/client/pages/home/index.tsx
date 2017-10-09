@@ -64,13 +64,13 @@ type WithSnacksFromGraphQLResultProps = ReduxConnectedProps & SnacksQueryProps;
 const withSnacksFromGraphQL = graphql<
   DashboardSnacksQuery,
   ReduxConnectedProps,
-  SnacksQueryProps
+  WithSnacksFromGraphQLResultProps
 >(require("client/graphql-queries/DashboardSnacks.graphql"), {
   options(props) {
     // Always refetch this query when the page is loaded (component is mounted)
     return { fetchPolicy: "cache-and-network" };
   },
-  props(result) {
+  props(result): SnacksQueryProps {
     if (result.data && result.data.allSnacks) {
       return {
         snacks: result.data.allSnacks
