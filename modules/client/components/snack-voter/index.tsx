@@ -1,6 +1,7 @@
 import * as React from "react";
 import { SnackId } from "records/snack-record";
 import partial from "lodash-es/partial";
+import { PopularityMode } from "client/state";
 
 export type SnackVoteInfo = {
   id: SnackId;
@@ -8,15 +9,27 @@ export type SnackVoteInfo = {
   voteCount: number;
 };
 export interface SnackVoterProps {
+  popularityMode: PopularityMode;
   snacks: null | SnackVoteInfo[];
   onVote: (snack: SnackVoteInfo) => void;
 }
 
-export const calcPopularity = (snackVotes: number, maxVotes: number): number =>
-  maxVotes <= 0 ? 100 : Math.round(100.0 * snackVotes / maxVotes);
+export const calcPopularityPercentage = (
+  snackVotes: number,
+  maxVotes: number
+): string => {
+  const percentage =
+    maxVotes <= 0 ? 100 : Math.round(100.0 * snackVotes / maxVotes);
+  return `${percentage}%`;
+};
 
 export function SnackVoter(props: SnackVoterProps) {
-  const { snacks, onVote } = props;
+  const { snacks, onVote, popularityMode } = props;
+
+  const calcPopularity =
+    popularityMode === PopularityMode.PERCENTAGE
+      ? calcPopularityPercentage
+      : (count: number) => `${count} votes`;
 
   let voteRows: JSX.Element | JSX.Element[];
   if (snacks === null) {
@@ -29,7 +42,7 @@ export function SnackVoter(props: SnackVoterProps) {
       const popularity = calcPopularity(snack.voteCount, maxVotes);
       return (
         <li key={idx}>
-          {snack.name}&nbsp; (popularity: {popularity}%)&nbsp;
+          {snack.name}&nbsp; (popularity: {popularity})&nbsp;
           <a onClick={partial(onVote, snack)}>Vote</a>
         </li>
       );

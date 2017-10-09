@@ -65,7 +65,8 @@ export function mockProvider(opts?: MockProviderOpts) {
 
   const reducer = opts.reducer || rootReducer;
 
-  let state = opts.state || reducer(undefined as any, { type: "@@INIT" });
+  let state =
+    opts.state || reducer(undefined as any, { type: "@@INIT" } as any);
   if (opts.initState) state = opts.initState(state);
 
   const store = createStore<State.Type>(reducer, state);

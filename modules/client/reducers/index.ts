@@ -1,23 +1,15 @@
 import * as State from "../state";
-
-import { Action } from "redux";
-import { Lens } from "@atomic-object/lenses";
-
-const defaultState: State.Type = {
-  router: undefined as any, // provided at startup
-  apollo: undefined as any // provided at startup
-};
-
-export function targetReducer<T, U>(
-  reducer: (arg: U, action: any) => U,
-  lens: Lens<T, U>
-): (arg: T, action: any) => T {
-  return (arg: T, action: any) => lens.set(arg, reducer(lens.get(arg), action));
-}
+import { ActionTypeKeys, ActionTypes } from "client/actions";
 
 export function rootReducer(
-  state: State.Type = defaultState,
-  action: Action
+  state: State.Type = State.DEFAULT,
+  action: ActionTypes
 ): State.Type {
-  return state;
+  switch (action.type) {
+    case ActionTypeKeys.SET_POPULARITY:
+      return State.popularityMode.set(state, action.popularityMode);
+
+    default:
+      return state;
+  }
 }

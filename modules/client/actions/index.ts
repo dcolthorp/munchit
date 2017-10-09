@@ -1,7 +1,22 @@
+import { PopularityMode } from "client/state";
+
 export enum ActionTypeKeys {
-  OTHER_ACTION = "fake"
+  SET_POPULARITY = "SET_POPULARITY",
+  OTHER_ACTION = "__fake_event__"
 }
-export type ActionTypes = OtherAction;
+export type ActionTypes = SetPopularityAction | OtherAction;
+
+export type SetPopularityAction = {
+  type: ActionTypeKeys.SET_POPULARITY;
+  popularityMode: PopularityMode;
+};
+
+export const setPopularity = (
+  popularityMode: PopularityMode
+): SetPopularityAction => ({
+  type: ActionTypeKeys.SET_POPULARITY,
+  popularityMode
+});
 
 export type OtherAction = {
   readonly type: ActionTypeKeys.OTHER_ACTION;

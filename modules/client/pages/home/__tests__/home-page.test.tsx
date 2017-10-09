@@ -39,7 +39,7 @@ describe("Home page", () => {
     expect(page.find(SnackVoter).text()).toContain("no snacks");
   });
 
-  it("Shows a message if there are no snacks", async () => {
+  it("Shows the snacks in a list", async () => {
     const Provider = mockProvider({
       mocks: {
         Query: () => ({
