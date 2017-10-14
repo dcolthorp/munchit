@@ -8,6 +8,7 @@ exports.up = async function(knex: Knex) {
       .notNullable()
       .unique();
   });
+
   await knex.schema.createTable("votes", table => {
     table.increments("id");
     table
@@ -25,8 +26,7 @@ exports.up = async function(knex: Knex) {
   });
 };
 
-exports.down = function(knex: Knex) {
-  return knex.schema
-    .dropTable("votes")
-    .then(() => knex.schema.dropTable("snacks"));
+exports.down = async function(knex: Knex) {
+  await knex.schema.dropTable("votes");
+  await knex.schema.dropTable("snacks");
 };
