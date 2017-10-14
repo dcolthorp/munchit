@@ -4,7 +4,7 @@ import { SnackId } from "records/snack-record";
 import * as DataLoader from "dataloader";
 import { keyBy } from "lodash-es";
 
-export type VoteId = NumberId<Vote>;
+export type VoteId = NumberId<"votes">;
 
 export interface UnsavedVote {
   snackId: SnackId;
