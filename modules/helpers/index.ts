@@ -2,6 +2,13 @@ import { Lens } from "@atomic-object/lenses/lib";
 
 export { AssertAssignable } from "./assert-assignable";
 
+/** Used by Flavor to mark a type in a readable way. */
+interface Flavoring<FlavorT> {
+  _type?: FlavorT;
+}
+/** Create a "flavored" version of a type. TypeScript will disallow mixing flavors, but will allow unflavored values of that type to be passed in where a flavored version is expected. This is a less restrictive form of branding. */
+export type Flavor<T, FlavorT> = T & Flavoring<FlavorT>;
+
 export function sleep(ms: number) {
   return new Promise(resolve => {
     setTimeout(resolve, ms);
