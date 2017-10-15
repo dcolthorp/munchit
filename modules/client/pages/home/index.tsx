@@ -26,24 +26,36 @@ type Props = RouteComponentProps<{}>;
 interface WithApolloProps {
   client: ApolloClient;
 }
-
-/** This is the props `withApollo` produces, which is an input to our `connect` call. */
 type PropsWithApollo = Props & WithApolloProps;
 
+/** The props we intend to get from mapStateToProps */
 type StateProps = Pick<HomePageUIProps, "popularityMode">;
+/** The props we intend to get from mapDispatchToProps */
+type DispatchProps = Pick<HomePageUIProps, "onVote" | "onPopularityModeChange">;
+/** The combined props coming out of connect */
+type ReduxConnectedProps = PropsWithApollo & DispatchProps & StateProps;
+
+/** The props we intend to get from graphql */
+type GraphQLProps = Pick<HomePageUIProps, "snacks">;
+
+/** Assert that our combined props type is compatible with HomePageUIProps */
+type _check = AssertAssignable<
+  HomePageUIProps,
+  ReduxConnectedProps & GraphQLProps
+>;
+
 function mapStateToProps(
   state: State.Type,
-  ownProps: WithApolloProps
+  ownProps: PropsWithApollo
 ): StateProps {
   return {
     popularityMode: State.popularityMode(state)
   };
 }
 
-type DispatchProps = Pick<HomePageUIProps, "onVote" | "onPopularityModeChange">;
 function mapDispatchToProps(
   dispatch: Dispatch<any>,
-  ownProps: WithApolloProps
+  ownProps: PropsWithApollo
 ): DispatchProps {
   const { client } = ownProps;
   return {
@@ -56,21 +68,18 @@ const connectedToRedux = connect<{}, DispatchProps, {}>(
   mapStateToProps,
   mapDispatchToProps
 );
-type ReduxConnectedProps = PropsWithApollo & DispatchProps & StateProps;
 
 /** Higher order component that fetches the snack data and provides the `snacks` prop to wrapped component. */
-type SnacksQueryProps = Pick<HomePageUIProps, "snacks">;
-type WithSnacksFromGraphQLResultProps = ReduxConnectedProps & SnacksQueryProps;
 const withSnacksFromGraphQL = graphql<
   DashboardSnacksQuery,
   ReduxConnectedProps,
-  WithSnacksFromGraphQLResultProps
+  HomePageUIProps
 >(require("client/graphql-queries/DashboardSnacks.graphql"), {
   options(props) {
     // Always refetch this query when the page is loaded (component is mounted)
     return { fetchPolicy: "cache-and-network" };
   },
-  props(result): SnacksQueryProps {
+  props(result): GraphQLProps {
     if (result.data && result.data.allSnacks) {
       return {
         snacks: result.data.allSnacks
@@ -82,12 +91,6 @@ const withSnacksFromGraphQL = graphql<
     }
   }
 });
-
-/** Assert that our combined props type is compatible with HomePageUIProps */
-type _check = AssertAssignable<
-  HomePageUIProps,
-  WithSnacksFromGraphQLResultProps
->;
 
 /** The fully-wired home page, with  */
 export const HomePage = withApollo(
