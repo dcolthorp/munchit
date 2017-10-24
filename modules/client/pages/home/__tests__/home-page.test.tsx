@@ -3,9 +3,7 @@ import { mount } from "enzyme";
 import * as React from "react";
 import { HomePage } from "client/pages/home";
 import {
-  SnackVoter,
-  SnackVoterEntry,
-  SnackVoterEntryProps
+  SnackVoterEntry
 } from "client/components/snack-voter";
 import { MockList } from "graphql-tools";
 import { sleep } from "helpers";
@@ -20,7 +18,7 @@ describe("Home page", () => {
       </Provider>
     );
 
-    expect(page.find(SnackVoter).text()).toContain("Loading");
+    expect(page.text()).toContain("Loading");
   });
 
   it("Shows a message if there are no snacks", async () => {
@@ -40,10 +38,10 @@ describe("Home page", () => {
 
     await sleep(0);
 
-    expect(page.find(SnackVoter).text()).toContain("no snacks");
+    expect(page.text()).toContain("no snacks");
   });
 
-  it("Shows the snacks in a list", async () => {
+  it("Shows popularity based on the mode.", async () => {
     const Provider = mockProvider({
       mocks: {
         Query: () => ({
@@ -63,16 +61,16 @@ describe("Home page", () => {
 
     await sleep(0);
 
-    const fooToggle = page
-      .find(SnackVoterEntry)
-      .filterWhere(e => e.prop("name") === "Foo");
+    const toggles = page.find(SnackVoterEntry);
+    const fooToggle = toggles.filterWhere(e => e.text().includes("Foo"));
+    const barToggle = toggles.filterWhere(e => e.text().includes("Bar"));
 
-    console.log(fooToggle.debug());
-    expect(fooToggle.prop("popularityDesc")).toMatch("50%");
+    expect(fooToggle.text()).toMatch("50%");
+    expect(barToggle.text()).toMatch("100%");
 
-    const barToggle = page
-      .find(SnackVoterEntry)
-      .filterWhere(e => e.prop("name") === "Bar");
-    expect(barToggle.prop("popularityDesc")).toMatch("100%");
+    page.find("#home-page-vote-count").simulate("change");
+
+    expect(fooToggle.text()).toMatch("1 votes");
+    expect(barToggle.text()).toMatch("2 votes");
   });
 });

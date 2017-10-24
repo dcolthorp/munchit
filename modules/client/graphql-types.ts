@@ -2,38 +2,38 @@
 //  This file was automatically generated and should not be edited.
 
 export type AddSnackMutationVariables = {
-  name: string,
+  name: string;
 };
 
 export type AddSnackMutation = {
-  addSnack:  {
-    id: number,
-    name: string,
-    voteCount: number,
-  } | null,
+  addSnack: {
+    id: number;
+    name: string;
+    voteCount: number;
+  } | null;
 };
 
 export type VoteForSnackMutationVariables = {
-  snackId: number,
+  snackId: number;
 };
 
 export type VoteForSnackMutation = {
-  voteFor:  {
-    __typename: "Vote",
-    id: number,
-    snack:  {
-      __typename: string,
-      id: number,
-      voteCount: number,
-    },
-  } | null,
+  voteFor: {
+    __typename: "Vote";
+    id: number;
+    snack: {
+      __typename: string;
+      id: number;
+      voteCount: number;
+    };
+  } | null;
 };
 
 export type DashboardSnacksQuery = {
-  allSnacks:  Array< {
-    id: number,
-    name: string,
-    voteCount: number,
-  } > | null,
+  allSnacks: Array<{
+    id: number;
+    name: string;
+    voteCount: number;
+  }> | null;
 };
 /* tslint:enable */
