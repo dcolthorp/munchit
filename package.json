@@ -42,9 +42,9 @@
       "sleep 8 && nodemon -e graphql,gql -w modules/ -x 'yarn build:graphql'",
     "dev:storybook": "start-storybook -p 9001 -c .storybook",
     "lint":
-      "tslint --type-check -c ./tslint.json -p ./tsconfig.json './modules/**/*.{ts,tsx}'",
+      "tslint -c ./tslint.json -p ./tsconfig.json './modules/**/*.{ts,tsx}'",
     "lint:fix":
-      "tslint --fix --type-check -c ./tslint.json -p ./tsconfig.json './modules/**/*.{ts,tsx}'",
+      "tslint --fix -c ./tslint.json -p ./tsconfig.json './modules/**/*.{ts,tsx}'",
     "fmt:prettier":
       "prettier --write 'modules/**/*.{ts,tsx,js,jsx}' package.json",
     "fmt": "yarn fmt:prettier; yarn lint:fix",
