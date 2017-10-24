@@ -8,9 +8,19 @@
     "build:graphql:schema:json":
       "apollo-codegen introspect-schema modules/graphql-api/schema.graphql --output modules/graphql-api/schema.json",
     "build:graphql:schema:types":
+      "yarn build:graphql:schema:types:gen && yarn build:graphql:schema:types:fmt",
+    "build:graphql:schema:types:gen":
       "gql-gen --file modules/graphql-api/schema.json  --template typescript --out modules/graphql-api/schema-types.ts modules/graphql-api/schema.graphql",
+    "build:graphql:schema:types:fmt":
+      "prettier --write 'modules/graphql-api/schema-types.ts'",
     "build:graphql:client:types":
-      "apollo-codegen generate 'modules/client/**/*.graphql' --schema modules/graphql-api/schema.json --target typescript --output modules/client/graphql-types.ts",
+      "yarn build:graphql:client:types:gen; yarn build:graphql:client:types:fmt; yarn build:graphql:client:types:fmt",
+    "build:graphql:client:types:gen":
+      "apollo-codegen generate 'modules/{client,usp-components}/**/*.graphql' --schema modules/graphql-api/schema.json --target typescript --output modules/client/graphql-types.ts",
+    "build:graphql:client:types:fmt":
+      "prettier --write 'modules/client/graphql-types.ts'",
+    "build:graphql:fmt":
+      "concurrently 'yarn build:graphql:schema:types:fmt' 'yarn build:graphql:client:types:fmt'",
     "build:graphql":
       "yarn build:graphql:schema:json && concurrently 'yarn build:graphql:schema:types' 'yarn build:graphql:client:types'",
     "build:client": "webpack --config ./webpack/client.config.js",

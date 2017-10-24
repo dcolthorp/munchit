@@ -2,9 +2,7 @@ import { mockProvider } from "client/test-helpers/mock-apollo";
 import { mount } from "enzyme";
 import * as React from "react";
 import { HomePage } from "client/pages/home";
-import {
-  SnackVoterEntry
-} from "client/components/snack-voter";
+import { SnackVoterEntry } from "client/components/snack-voter";
 import { MockList } from "graphql-tools";
 import { sleep } from "helpers";
 
