@@ -5,6 +5,7 @@ import { HomePage } from "client/pages/home";
 import { SnackVoterEntry } from "client/components/snack-voter";
 import { MockList } from "graphql-tools";
 import { sleep } from "helpers";
+import * as State from "client/state";
 
 describe("Home page", () => {
   it("Begins in a loading state", () => {
@@ -41,6 +42,9 @@ describe("Home page", () => {
 
   it("Shows popularity based on the mode.", async () => {
     const Provider = mockProvider({
+      initState: state =>
+        State.popularityMode.set(state, State.PopularityMode.PERCENTAGE),
+
       mocks: {
         Query: () => ({
           allSnacks: () => [
