@@ -7,7 +7,7 @@ export type SnackId = NumberId<"snacks">;
 export interface UnsavedSnack {
   name: string;
 }
-export interface Snack extends UnsavedSnack {
+export interface SavedSnack extends UnsavedSnack {
   id: SnackId;
 }
 

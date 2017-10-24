@@ -2,8 +2,8 @@ import * as React from "react";
 import { PopularityMode } from "client/state";
 
 export interface Props {
-  selected: PopularityMode;
-  onChange: (mode: PopularityMode) => void;
+  readonly selected: PopularityMode;
+  readonly onChange: (mode: PopularityMode) => void;
 }
 
 export const PopularitySelector: React.SFC<Props> = props => (

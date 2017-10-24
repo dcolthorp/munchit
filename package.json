@@ -51,13 +51,12 @@
       "NODE_ENV=test node dist/server.js > tests/acceptance/last-run.log",
     "test:acceptance:run":
       "while ! nc -z localhost 3002; do sleep 0.1; done; cross-env NODE_ENV=test jest -w1 -c ./acceptance.jestrc.json",
-    "db:up": "cd docker; exec docker-compose up",
+    "db:up": "exec docker-compose up",
     "db:create": "yarn db:create:dev; yarn db:create:test",
     "db:create:dev":
-      "cd docker; docker-compose run  postgres createdb -h postgres development",
-    "db:create:test":
-      "cd docker; docker-compose run  postgres createdb -h postgres test",
-    "db:run": "cd docker; docker-compose run  postgres psql -h postgres",
+      "docker-compose run  postgres createdb -h postgres development",
+    "db:create:test": "docker-compose run  postgres createdb -h postgres test",
+    "db:run": "docker-compose run  postgres psql -h postgres",
     "db:migrate:make": "knex migrate:make",
     "db:migrate:latest": "knex migrate:latest",
     "db:migrate:rollback": "knex migrate:rollback",
@@ -65,7 +64,7 @@
     "db:seed:run": "knex seed:run",
     "validate": "npm ls"
   },
-  "pre-commit": ["fmt:prettier", "lint:fix"],
+  "pre-commit": [],
   "jest": {
     "transform": {
       "\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js",

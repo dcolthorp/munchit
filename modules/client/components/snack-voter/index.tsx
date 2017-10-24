@@ -4,14 +4,14 @@ import partial from "lodash-es/partial";
 import { PopularityMode } from "client/state";
 
 export type SnackVoteInfo = {
-  id: SnackId;
-  name: string;
-  voteCount: number;
+  readonly id: SnackId;
+  readonly name: string;
+  readonly voteCount: number;
 };
 export interface SnackVoterProps {
-  popularityMode: PopularityMode;
-  snacks: null | SnackVoteInfo[];
-  onVote: (snack: SnackVoteInfo) => void;
+  readonly popularityMode: PopularityMode;
+  readonly snacks: null | ReadonlyArray<SnackVoteInfo>;
+  readonly onVote: (snack: SnackVoteInfo) => void;
 }
 
 export const calcPopularityPercentage = (
@@ -23,7 +23,20 @@ export const calcPopularityPercentage = (
   return `${percentage}%`;
 };
 
-export function SnackVoter(props: SnackVoterProps) {
+export interface SnackVoterEntryProps {
+  name: string;
+  popularityDesc: string;
+  onVote: () => void;
+}
+
+export const SnackVoterEntry: React.SFC<SnackVoterEntryProps> = props => (
+  <li>
+    {props.name}&nbsp; (popularity: {props.popularityDesc})&nbsp;
+    <a onClick={props.onVote}>Vote</a>
+  </li>
+);
+
+export const SnackVoter: React.SFC<SnackVoterProps> = props => {
   const { snacks, onVote, popularityMode } = props;
 
   const calcPopularity =
@@ -41,13 +54,15 @@ export function SnackVoter(props: SnackVoterProps) {
     voteRows = snacks.map((snack, idx) => {
       const popularity = calcPopularity(snack.voteCount, maxVotes);
       return (
-        <li key={idx}>
-          {snack.name}&nbsp; (popularity: {popularity})&nbsp;
-          <a onClick={partial(onVote, snack)}>Vote</a>
-        </li>
+        <SnackVoterEntry
+          key={idx}
+          name={snack.name}
+          popularityDesc={popularity}
+          onVote={partial(onVote, snack)}
+        />
       );
     });
   }
 
   return <ul>{voteRows}</ul>;
-}
+};

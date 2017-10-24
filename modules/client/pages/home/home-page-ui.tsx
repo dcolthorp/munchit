@@ -6,10 +6,10 @@ import { PopularitySelector } from "client/pages/home/popularity-selector";
 require("./styles.scss");
 
 export interface HomePageUIProps {
-  snacks: SnackVoterProps["snacks"];
-  onVote: SnackVoterProps["onVote"];
-  popularityMode: PopularityMode;
-  onPopularityModeChange: (mode: PopularityMode) => void;
+  readonly snacks: SnackVoterProps["snacks"];
+  readonly onVote: SnackVoterProps["onVote"];
+  readonly popularityMode: PopularityMode;
+  readonly onPopularityModeChange: (mode: PopularityMode) => void;
 }
 
 export const HomePageUI: React.SFC<HomePageUIProps> = props => {

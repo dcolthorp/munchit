@@ -24,7 +24,7 @@ type Props = RouteComponentProps<{}>;
 
 /** We use Apollo's withApollo higher-order-component to dependency-inject our GraphQL client. It provides these props. */
 interface WithApolloProps {
-  client: ApolloClient;
+  readonly client: ApolloClient;
 }
 type PropsWithApollo = Props & WithApolloProps;
 

@@ -7,9 +7,9 @@ export enum AddSnackFields {
 }
 
 export interface AddSnackUIProps {
-  fields: { [key in AddSnackFields]: string };
-  onFieldChanged: (field: AddSnackFields, value: string) => void;
-  onSave: () => void;
+  readonly fields: { [key in AddSnackFields]: string };
+  readonly onFieldChanged: (field: AddSnackFields, value: string) => void;
+  readonly onSave: () => void;
 }
 export function AddSnackUI(props: AddSnackUIProps) {
   const { onSave, onFieldChanged, fields } = props;

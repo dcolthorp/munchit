@@ -7,7 +7,7 @@ import { ApolloClient } from "apollo-client";
 import { addSnackMutation } from "client/graphql-mutations/add-snack-mutation";
 
 export interface ConnectedProps {
-  client: ApolloClient;
+  readonly client: ApolloClient;
 }
 
 function mapDispatchToProps(

@@ -2,7 +2,11 @@ import { mockProvider } from "client/test-helpers/mock-apollo";
 import { mount } from "enzyme";
 import * as React from "react";
 import { HomePage } from "client/pages/home";
-import { SnackVoter } from "client/components/snack-voter";
+import {
+  SnackVoter,
+  SnackVoterEntry,
+  SnackVoterEntryProps
+} from "client/components/snack-voter";
 import { MockList } from "graphql-tools";
 import { sleep } from "helpers";
 
@@ -59,8 +63,16 @@ describe("Home page", () => {
 
     await sleep(0);
 
-    const votesText = page.find(SnackVoter).text();
-    expect(votesText).toContain("Foo");
-    expect(votesText).toContain("Bar");
+    const fooToggle = page
+      .find(SnackVoterEntry)
+      .filterWhere(e => e.prop("name") === "Foo");
+
+    console.log(fooToggle.debug());
+    expect(fooToggle.prop("popularityDesc")).toMatch("50%");
+
+    const barToggle = page
+      .find(SnackVoterEntry)
+      .filterWhere(e => e.prop("name") === "Bar");
+    expect(barToggle.prop("popularityDesc")).toMatch("100%");
   });
 });
