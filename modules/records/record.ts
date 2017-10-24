@@ -5,11 +5,6 @@ import keyBy from "lodash-es/keyBy";
 import groupBy from "lodash-es/groupBy";
 import { Flavor } from "helpers";
 
-/** This interface is used as a marker simply to make an Id<SomeType> not compatible with Id<OtherType> */
-interface IdBrand<T> {
-  _type?: T;
-}
-
 /** This type is just a number representing a database ID that tracks the type of the source. */
 export type NumberId<T> = Flavor<number, T>;
 /** This type is just a string representing a database ID that tracks the type of the source. */

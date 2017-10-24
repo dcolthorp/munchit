@@ -22,7 +22,7 @@ export type VoteForSnackMutation = {
     __typename: "Vote";
     id: number;
     snack: {
-      __typename: string;
+      __typename: "Snack";
       id: number;
       voteCount: number;
     };
@@ -36,4 +36,3 @@ export type DashboardSnacksQuery = {
     voteCount: number;
   }> | null;
 };
-/* tslint:enable */
