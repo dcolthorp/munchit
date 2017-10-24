@@ -1,9 +1,9 @@
-import gql from "graphql-tag";
 import { withContext } from "__tests__/db-helpers";
+import { DashboardSnacksQuery } from "client/graphql-types";
 
-describe("Snack queries", () => {
+describe("Dashboard snack query", () => {
   it(
-    "can fetch snacks from the database with a vote count",
+    "Returns snacks with name and vote count",
     withContext(async context => {
       const graphql = context.apolloClient;
 
@@ -13,21 +13,16 @@ describe("Snack queries", () => {
         context.voteRepository.insert({ snackId: snack.id })
       ]);
 
-      const result = await graphql.query<any>({
-        query: gql`
-          query Snacks {
-            allSnacks {
-              id
-              name
-              voteCount
-            }
-          }
-        `
+      const result = await graphql.query<DashboardSnacksQuery>({
+        query: require("../DashboardSnacks.graphql")
       });
+
+      if (!result.data || !result.data.allSnacks) throw "no snacks came back!";
 
       expect(result.data.allSnacks.length).toEqual(1);
 
-      const snackResult: any = result.data.allSnacks[0];
+      const snackResult = result.data.allSnacks[0];
+      expect(snackResult.id).toEqual(snack.id);
       expect(snackResult.name).toEqual("Foo");
       expect(snackResult.voteCount).toEqual(2);
     })
