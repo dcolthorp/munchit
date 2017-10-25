@@ -67,4 +67,22 @@ describe("Snack Report", () => {
     expect(page.text()).toContain("19");
     expect(page.text()).toContain("vegan");
   });
+
+  it("Shows selected tags", async () => {
+    const Provider = mockProvider();
+    const page = mount(
+      <Provider>
+        <SnackReportPage />
+      </Provider>
+    );
+
+    await sleep(0);
+
+    const selectedTags = page
+      .find("input[checked=true]")
+      .map(n => n.closest("label").text());
+
+    expect(selectedTags.length).toBe(1);
+    expect(selectedTags).toContain("Vegan");
+  });
 });
