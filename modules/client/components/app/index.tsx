@@ -13,6 +13,9 @@ export function AppHeader() {
         <li>
           <Link to="/add-snack">Add Snack</Link>
         </li>
+        <li>
+          <Link to="/snack-report">Snack Report</Link>
+        </li>
       </ul>
     </div>
   );
