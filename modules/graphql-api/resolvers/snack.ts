@@ -2,8 +2,9 @@ import { Snack } from "graphql-api/schema-types";
 import { Context } from "graphql-api";
 
 /** The graphql schema-compatible typescript type required to implement any snack resolver */
-export interface MinimalSnack {
+export interface MinimalSnack extends Partial<Snack> {
   id: Snack["id"];
+  voteCount?: number;
 }
 
 export const SnackResolvers = {

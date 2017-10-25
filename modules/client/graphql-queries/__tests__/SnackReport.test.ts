@@ -22,8 +22,8 @@ describe("query SnackReport", () => {
       if (!result.data || !result.data.topSnacks) throw "no result!";
       expect(result.data.topSnacks.length).toEqual(2);
 
-      const fooResult = result.data.topSnacks[1];
-      const barResult = result.data.topSnacks[0];
+      const fooResult = result.data.topSnacks[0];
+      const barResult = result.data.topSnacks[1];
 
       expect(fooResult.name).toEqual("Foo");
       expect(fooResult.voteCount).toEqual(2);

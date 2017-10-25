@@ -18,6 +18,11 @@ export const QueryResolvers = {
     context: Context
   ): Promise<MinimalSnack[]> {
     const snacks = await context.snackRepository.all();
-    return sortBy(snacks, "name");
+    const votes = await context.voteRepository.countForSnack.loadMany(
+      snacks.map(s => s.id)
+    );
+
+    const pairs = snacks.map((snack, i) => ({ snack, count: votes[i] }));
+    return sortBy(pairs, x => -x.count).map(x => x.snack);
   }
 };
