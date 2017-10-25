@@ -2,6 +2,8 @@ import { mount } from "enzyme";
 import { mockProvider } from "client/test-helpers/mock-apollo";
 import * as React from "react";
 import { SnackReportPage } from "client/pages/snack-report";
+import { sleep } from "helpers";
+import { MockList } from "graphql-tools";
 
 describe("Snack Report", () => {
   it("Begins in a loading state", () => {
@@ -14,5 +16,53 @@ describe("Snack Report", () => {
     );
 
     expect(page.text()).toContain("Loading");
+  });
+
+  it("Shows a message if there are no snacks", async () => {
+    const Provider = mockProvider({
+      mocks: {
+        Query: () => ({
+          allSnacks: () => new MockList(0)
+        })
+      }
+    });
+
+    const page = mount(
+      <Provider>
+        <SnackReportPage />
+      </Provider>
+    );
+
+    await sleep(0);
+
+    expect(page.text()).toMatch(/no snacks/i);
+  });
+
+  it("Shows snacks", async () => {
+    const Provider = mockProvider({
+      mocks: {
+        Query: () => ({
+          allSnacks: [
+            {
+              id: 1,
+              voteCount: 19,
+              name: "Pimento cheese"
+            }
+          ]
+        })
+      }
+    });
+
+    const page = mount(
+      <Provider>
+        <SnackReportPage />
+      </Provider>
+    );
+
+    await sleep(0);
+
+    expect(page.text()).toContain("Pimento cheese");
+    expect(page.text()).toContain("1.");
+    expect(page.text()).toContain("19");
   });
 });

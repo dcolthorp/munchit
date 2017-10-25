@@ -3,8 +3,8 @@ import {
   SnackReportUIProps,
   SnackReportRow
 } from "client/pages/snack-report/snack-report-ui";
-import * as React from "react";
 import { SnackReportQuery } from "client/graphql-types";
+import { graphql } from "react-apollo";
 
 export function dataToRows(data: SnackReportQuery): SnackReportRow[] {
   if (!data.allSnacks) {
@@ -19,6 +19,18 @@ export function dataToRows(data: SnackReportQuery): SnackReportRow[] {
   }));
 }
 
-export const SnackReportPage: React.SFC = props => (
-  <SnackReportUI rows={null} />
-);
+const wireToApollo = graphql<
+  SnackReportQuery,
+  {},
+  SnackReportUIProps
+>(require("client/graphql-queries/SnackReport.graphql"), {
+  props(result): SnackReportUIProps {
+    if (!result.data || result.data.loading) {
+      return { rows: null };
+    } else {
+      return dataToProps(result.data);
+    }
+  }
+});
+
+export const SnackReportPage = wireToApollo(SnackReportUI);
