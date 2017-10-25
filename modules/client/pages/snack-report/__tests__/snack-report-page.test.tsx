@@ -6,6 +6,8 @@ import { sleep } from "helpers";
 import { MockList } from "graphql-tools";
 import * as State from "client/state";
 import * as TagSet from "core/tag-set";
+import { TopSnacksQueryArgs } from "graphql-api/schema-types";
+import isEqual from "lodash-es/isEqual";
 
 describe("Snack Report", () => {
   it("Begins in a loading state", () => {
@@ -72,7 +74,28 @@ describe("Snack Report", () => {
 
   it("Shows and let's the user update selected tags", async () => {
     const Provider = mockProvider({
-      initState: State.selectedTags.comp(TagSet.tagValue("Vegan")).set(true)
+      initState: State.selectedTags.comp(TagSet.tagValue("Vegan")).set(true),
+      mocks: {
+        Query: () => ({
+          topSnacks: (ignored: any, args: TopSnacksQueryArgs) => {
+            if (isEqual(args.tags, ["Vegan"])) {
+              return [
+                {
+                  id: 1,
+                  name: "Vegan only snack"
+                }
+              ];
+            }
+
+            return [
+              {
+                id: 2,
+                name: "Other snack"
+              }
+            ];
+          }
+        })
+      }
     });
 
     const page = mount(
@@ -97,9 +120,13 @@ describe("Snack Report", () => {
 
     expect(findSelected()).toEqual(["Vegan"]);
 
+    expect(page.text()).toContain("Vegan only snack");
+
     checkboxFor("Go-to").simulate("change");
     await sleep(0);
     expect(findSelected()).toEqual(["Go-to", "Vegan"]);
+
+    expect(page.text()).toContain("Other snack");
 
     checkboxFor("Go-to").simulate("change");
     await sleep(0);
