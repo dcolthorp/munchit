@@ -18,6 +18,7 @@ interface State {
 export type Type = State;
 
 export const popularityMode = Lens.from<State>().prop("popularityMode");
+export const selectedTags = Lens.from<State>().prop("selectedTags");
 
 export const DEFAULT: State = {
   router: undefined as any, // provided at startup

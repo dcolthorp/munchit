@@ -11,14 +11,15 @@ export function rootReducer(
       return State.popularityMode.set(state, action.popularityMode);
 
     case ActionTypeKeys.CHANGE_TAG:
-      const selectedTags = state.selectedTags;
       const { tag, value } = action;
 
-      const newSelectedTags = value
-        ? TagSet.add(selectedTags, tag)
-        : TagSet.remove(selectedTags, tag);
+      // With update/set:
+      // return State.selectedTags.update(state, s =>
+      //   TagSet.tagValue(tag).set(s, value)
+      // );
 
-      return { ...state, selectedTags: newSelectedTags };
+      // Using comp:
+      return State.selectedTags.comp(TagSet.tagValue(tag)).set(state, value);
 
     default:
       return state;

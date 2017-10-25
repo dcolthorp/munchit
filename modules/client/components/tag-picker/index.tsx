@@ -12,7 +12,7 @@ export const TagPicker: React.SFC<Props> = props => {
   if (tags.length === 0) return null;
 
   const entries = tags.map(tag => {
-    const checked = TagSet.has(selected, tag);
+    const checked = TagSet.tagValue(tag).get(selected);
     return (
       <li key={tag}>
         <label>

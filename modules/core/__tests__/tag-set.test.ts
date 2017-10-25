@@ -31,3 +31,28 @@ describe("TagSet.remove", () => {
     expect(TagSet.remove(original, "foo")).toBe(original);
   });
 });
+
+describe("tagValue", () => {
+  it("Can get presence of a tag in a tag set", () => {
+    expect(TagSet.tagValue("foo").get(["foo"])).toBe(true);
+    expect(TagSet.tagValue("bar").get(["foo"])).toBe(false);
+  });
+
+  it("Can set presence of a tag into a tag set", () => {
+    expect(TagSet.tagValue("foo").set(["bar"], true)).toEqual(["bar", "foo"]);
+    expect(TagSet.tagValue("foo").set(["foo"], false)).toEqual(TagSet.EMPTY);
+    expect(TagSet.tagValue("foo").set(["foo"], true)).toEqual(["foo"]);
+    expect(TagSet.tagValue("bar").set(["foo"], false)).toEqual(["foo"]);
+  });
+
+  it("Can update a tag in a tagset", () => {
+    expect(TagSet.tagValue("foo").update(["foo"], b => !b)).toEqual(
+      TagSet.EMPTY
+    );
+
+    expect(TagSet.tagValue("bar").update(["foo"], b => !b)).toEqual([
+      "bar",
+      "foo"
+    ]);
+  });
+});
