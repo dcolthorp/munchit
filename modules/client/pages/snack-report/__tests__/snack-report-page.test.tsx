@@ -22,7 +22,7 @@ describe("Snack Report", () => {
     const Provider = mockProvider({
       mocks: {
         Query: () => ({
-          allSnacks: () => new MockList(0)
+          topSnacks: () => new MockList(0)
         })
       }
     });
@@ -42,7 +42,7 @@ describe("Snack Report", () => {
     const Provider = mockProvider({
       mocks: {
         Query: () => ({
-          allSnacks: [
+          topSnacks: [
             {
               id: 1,
               voteCount: 19,

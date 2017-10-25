@@ -10,5 +10,14 @@ export const QueryResolvers = {
   ): Promise<MinimalSnack[]> {
     const snacks = await context.snackRepository.all();
     return sortBy(snacks, "name");
+  },
+
+  async topSnacks(
+    query: {},
+    args: {},
+    context: Context
+  ): Promise<MinimalSnack[]> {
+    const snacks = await context.snackRepository.all();
+    return sortBy(snacks, "name");
   }
 };

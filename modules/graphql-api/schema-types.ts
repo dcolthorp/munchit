@@ -2,6 +2,7 @@
 
 export interface Query {
   allSnacks: Array<Snack>;
+  topSnacks: Array<Snack>;
 }
 
 export interface Snack {

@@ -11,6 +11,7 @@ type Vote {
 
 type Query {
   allSnacks: [Snack!]
+  topSnacks: [Snack!]
 }
 
 type Mutation {

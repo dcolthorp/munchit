@@ -1,5 +1,5 @@
 query SnackReport {
-  allSnacks {
+  topSnacks {
     id
     name
     voteCount

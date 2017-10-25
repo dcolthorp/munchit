@@ -5,7 +5,7 @@ import { dataToRows } from "client/pages/snack-report";
 describe("SnackReport.dataToRows", () => {
   it("handles a failed lookup", () => {
     const data: SnackReportQuery = {
-      allSnacks: null
+      topSnacks: null
     };
 
     expect(dataToRows(data)).toEqual([]);
@@ -13,7 +13,7 @@ describe("SnackReport.dataToRows", () => {
 
   it("creates valid rows with incrementing place counts", () => {
     const data: SnackReportQuery = {
-      allSnacks: [
+      topSnacks: [
         {
           id: 29,
           name: "Cucumber sandwiches",

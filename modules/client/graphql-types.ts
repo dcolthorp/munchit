@@ -38,7 +38,7 @@ export type DashboardSnacksQuery = {
 };
 
 export type SnackReportQuery = {
-  allSnacks: Array<{
+  topSnacks: Array<{
     id: number;
     name: string;
     voteCount: number;
