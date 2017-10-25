@@ -2,6 +2,7 @@ import { rootReducer } from "client/reducers";
 import * as State from "client/state";
 import * as Actions from "client/actions";
 import { PopularityMode } from "client/state";
+import * as TagSet from "core/tag-set";
 
 describe("the app root reducer", () => {
   it("can set the popularity", () => {
@@ -20,5 +21,17 @@ describe("the app root reducer", () => {
       Actions.setPopularity(PM.PERCENTAGE)
     );
     expect(State.popularityMode(percentageState)).toEqual(PM.PERCENTAGE);
+  });
+
+  it("can change tags", () => {
+    let state = State.DEFAULT;
+
+    expect(TagSet.has(state.selectedTags, "foo")).toBe(false);
+
+    state = rootReducer(state, Actions.changeTag("foo", true));
+    expect(TagSet.has(state.selectedTags, "foo")).toBe(true);
+
+    state = rootReducer(state, Actions.changeTag("foo", false));
+    expect(TagSet.has(state.selectedTags, "foo")).toBe(false);
   });
 });

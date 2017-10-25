@@ -68,7 +68,7 @@ describe("Snack Report", () => {
     expect(page.text()).toContain("vegan");
   });
 
-  it("Shows selected tags", async () => {
+  it("Shows and let's the user update selected tags", async () => {
     const Provider = mockProvider();
     const page = mount(
       <Provider>
@@ -76,13 +76,26 @@ describe("Snack Report", () => {
       </Provider>
     );
 
+    const findSelected = () =>
+      page
+        .find("input[checked=true]")
+        .map(n => n.closest("label").text())
+        .sort();
+
+    const checkboxFor = (tag: string) =>
+      page
+        .find("label")
+        .filterWhere(l => l.text().includes(tag))
+        .find("input");
+
     await sleep(0);
 
-    const selectedTags = page
-      .find("input[checked=true]")
-      .map(n => n.closest("label").text());
+    expect(findSelected()).toEqual(["Vegan"]);
 
-    expect(selectedTags.length).toBe(1);
-    expect(selectedTags).toContain("Vegan");
+    checkboxFor("Go-to").simulate("change");
+    expect(findSelected()).toEqual(["Go-to", "Vegan"]);
+
+    checkboxFor("Go-to").simulate("change");
+    expect(findSelected()).toEqual(["Vegan"]);
   });
 });
