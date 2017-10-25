@@ -8,6 +8,8 @@ describe("SnackRepository", () => {
   let snackRepo = new SnackRepository(knex);
   let voteRepo = new VoteRepository(knex);
 
+  // WARNING: These tests all run in the same transaction,
+  // so unique constraints can be violated between them.
   beforeAll(async () => truncateAll(knex));
   afterAll(destroyConnection);
 

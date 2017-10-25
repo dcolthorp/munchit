@@ -11,6 +11,8 @@ import * as db from "../db";
 import { executableSchema } from "./index";
 import { SnackRepository } from "records/snack-record";
 import { VoteRepository } from "records/vote-record";
+import { TaggingRepository } from "records/tagging-record";
+import { TagRepository } from "records/tag-record";
 
 export function buildLocalApollo(schema: GraphQLSchema = executableSchema) {
   return new Context().apolloClient;
@@ -38,6 +40,8 @@ export class Context {
   pg = db.getConnection();
   snackRepository = new SnackRepository(this.pg);
   voteRepository = new VoteRepository(this.pg);
+  tagRepository = new TagRepository(this.pg);
+  taggingRepository = new TaggingRepository(this.pg);
 }
 
 /** Builds a new empty context for a request. */

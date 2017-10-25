@@ -9,6 +9,13 @@ describe("query SnackReport", () => {
 
       const barSnack = await context.snackRepository.insert({ name: "Bar" });
       const fooSnack = await context.snackRepository.insert({ name: "Foo" });
+
+      const tag = await context.tagRepository.insert({ name: "Filling" });
+      await context.taggingRepository.insert({
+        snackId: fooSnack.id,
+        tagId: tag.id
+      });
+
       await Promise.all([
         context.voteRepository.insert({ snackId: fooSnack.id }),
         context.voteRepository.insert({ snackId: fooSnack.id }),
@@ -27,11 +34,11 @@ describe("query SnackReport", () => {
 
       expect(fooResult.name).toEqual("Foo");
       expect(fooResult.voteCount).toEqual(2);
-      expect(fooResult.tags).toEqual(["delicious"]);
+      expect(fooResult.tags).toEqual(["Filling"]);
 
       expect(barResult.name).toEqual("Bar");
       expect(barResult.voteCount).toEqual(1);
-      expect(barResult.tags).toEqual(["delicious"]);
+      expect(barResult.tags).toEqual([]);
     })
   );
 });

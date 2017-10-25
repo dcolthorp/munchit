@@ -20,6 +20,8 @@ export const SnackResolvers = {
   },
 
   async tags(snack: MinimalSnack, args: {}, context: Context) {
-    return ["delicious"];
+    const taggings = await context.taggingRepository.forSnack.load(snack.id);
+    const tags = await context.tagRepository.forTagging.loadMany(taggings);
+    return tags.map(t => t.name);
   }
 };
