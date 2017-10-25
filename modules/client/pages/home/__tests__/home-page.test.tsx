@@ -40,7 +40,31 @@ describe("Home page", () => {
     expect(page.text()).toContain("no snacks");
   });
 
-  it("Shows popularity based on the mode.", async () => {
+  it("Shows snacks in a list", async () => {
+    const Provider = mockProvider({
+      mocks: {
+        Query: () => ({
+          allSnacks: () => [
+            { id: 1, name: "Foo", voteCount: 1 },
+            { id: 2, name: "Bar", voteCount: 2 }
+          ]
+        })
+      }
+    });
+
+    const page = mount(
+      <Provider>
+        <HomePage />
+      </Provider>
+    );
+
+    await sleep(0);
+
+    expect(page.text()).toMatch("Foo");
+    expect(page.text()).toMatch("Bar");
+  });
+
+  it("Lets the user toggle popularity mode", async () => {
     const Provider = mockProvider({
       initState: state =>
         State.popularityMode.set(state, State.PopularityMode.PERCENTAGE),
