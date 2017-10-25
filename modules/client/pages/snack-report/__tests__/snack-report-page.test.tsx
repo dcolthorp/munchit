@@ -98,9 +98,11 @@ describe("Snack Report", () => {
     expect(findSelected()).toEqual(["Vegan"]);
 
     checkboxFor("Go-to").simulate("change");
+    await sleep(0);
     expect(findSelected()).toEqual(["Go-to", "Vegan"]);
 
     checkboxFor("Go-to").simulate("change");
+    await sleep(0);
     expect(findSelected()).toEqual(["Vegan"]);
   });
 });

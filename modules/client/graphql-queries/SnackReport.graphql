@@ -1,5 +1,5 @@
-query SnackReport {
-  topSnacks {
+query SnackReport($tags: [String!]) {
+  topSnacks(tags: $tags) {
     id
     name
     voteCount

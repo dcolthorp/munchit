@@ -37,6 +37,10 @@ export type DashboardSnacksQuery = {
   }> | null;
 };
 
+export type SnackReportQueryVariables = {
+  tags?: Array<string> | null;
+};
+
 export type SnackReportQuery = {
   topSnacks: Array<{
     id: number;

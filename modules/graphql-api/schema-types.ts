@@ -5,6 +5,10 @@ export interface Query {
   topSnacks: Array<Snack>;
 }
 
+export interface TopSnacksQueryArgs {
+  tags: Array<string>;
+}
+
 export interface Snack {
   id: number;
   name: string;
