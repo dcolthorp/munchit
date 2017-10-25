@@ -36,3 +36,11 @@ export type DashboardSnacksQuery = {
     voteCount: number;
   }> | null;
 };
+
+export type SnackReportQuery = {
+  allSnacks: Array<{
+    id: number;
+    name: string;
+    voteCount: number;
+  }> | null;
+};

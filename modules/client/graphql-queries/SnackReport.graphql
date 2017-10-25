@@ -1,0 +1,7 @@
+query SnackReport {
+  allSnacks {
+    id
+    name
+    voteCount
+  }
+}
