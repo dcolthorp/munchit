@@ -1,0 +1,18 @@
+@import "client/styles/_core";
+
+.snack-report {
+  @include grid-container;
+
+  &-tags {
+    @include grid-column(3);
+
+    background-color: $light-gray;
+    border: solid 1px $medium-gray;
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+  &-table {
+    @include grid-column(9);
+    padding: 2rem 1rem;
+  }
+}

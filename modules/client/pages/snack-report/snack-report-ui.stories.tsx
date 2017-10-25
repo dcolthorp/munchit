@@ -1,6 +1,7 @@
 import { storiesOf } from "@storybook/react";
 import * as React from "react";
 import { SnackReportUI } from "./snack-report-ui";
+import { action } from "@storybook/addon-actions";
 
 storiesOf("Page – Snack Report", module)
   .add("Example", () => (
@@ -14,7 +15,21 @@ storiesOf("Page – Snack Report", module)
           tags: ["Gluten-free", "Vegan"]
         }
       ]}
+      onTagChange={action("onTagChange")}
+      selectedTags={["Gluten-free"]}
     />
   ))
-  .add("Empty", () => <SnackReportUI rows={[]} />)
-  .add("Loading", () => <SnackReportUI rows={null} />);
+  .add("Empty", () => (
+    <SnackReportUI
+      rows={[]}
+      onTagChange={action("onTagChange")}
+      selectedTags={[]}
+    />
+  ))
+  .add("Loading", () => (
+    <SnackReportUI
+      rows={null}
+      onTagChange={action("onTagChange")}
+      selectedTags={[]}
+    />
+  ));

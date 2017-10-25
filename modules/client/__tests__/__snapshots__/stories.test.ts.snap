@@ -1,5 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storyshots Component - TagPicker can show some tags selected 1`] = `
+<ul>
+  <li>
+    <label>
+      <input
+        checked={true}
+        onChange={[Function]}
+        type="checkbox"
+      />
+      Foo
+    </label>
+  </li>
+  <li>
+    <label>
+      <input
+        checked={false}
+        onChange={[Function]}
+        type="checkbox"
+      />
+      Bar
+    </label>
+  </li>
+</ul>
+`;
+
+exports[`Storyshots Component - TagPicker renders nothing when there are no tags 1`] = `null`;
+
 exports[`Storyshots Component – SnackVoter Basic count example 1`] = `
 <ul>
   <li>
@@ -288,7 +315,80 @@ exports[`Storyshots Page – Snack Report Empty 1`] = `
 <div
   className="snack-report"
 >
-  No snacks to show.
+  <div
+    className="snack-report-tags"
+  >
+    <h2>
+      Filter
+    </h2>
+    <ul>
+      <li>
+        <label>
+          <input
+            checked={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Go-to
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            checked={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Vegan
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            checked={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Vegetarian
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            checked={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Gluten-free
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            checked={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Expensive
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            checked={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Divisive
+        </label>
+      </li>
+    </ul>
+  </div>
+  <div
+    className="snack-report-table"
+  >
+    No snacks to show.
+  </div>
 </div>
 `;
 
@@ -296,56 +396,129 @@ exports[`Storyshots Page – Snack Report Example 1`] = `
 <div
   className="snack-report"
 >
-  <table>
-    <thead>
-      <tr>
-        <th>
-          Place
-        </th>
-        <th>
-          Votes
-        </th>
-        <th>
-          Snack
-        </th>
-        <th>
-          Tags
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          1
-          .
-        </td>
-        <td>
-          8
-        </td>
-        <td>
-          Cheese snack
-        </td>
-        <td>
-          
-        </td>
-      </tr>
-      <tr>
-        <td>
-          2
-          .
-        </td>
-        <td>
-          7
-        </td>
-        <td>
-          Guacamole
-        </td>
-        <td>
-          Gluten-free, Vegan
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div
+    className="snack-report-tags"
+  >
+    <h2>
+      Filter
+    </h2>
+    <ul>
+      <li>
+        <label>
+          <input
+            checked={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Go-to
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            checked={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Vegan
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            checked={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Vegetarian
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            checked={true}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Gluten-free
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            checked={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Expensive
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            checked={false}
+            onChange={[Function]}
+            type="checkbox"
+          />
+          Divisive
+        </label>
+      </li>
+    </ul>
+  </div>
+  <div
+    className="snack-report-table"
+  >
+    <table>
+      <thead>
+        <tr>
+          <th>
+            Place
+          </th>
+          <th>
+            Votes
+          </th>
+          <th>
+            Snack
+          </th>
+          <th>
+            Tags
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            1
+            .
+          </td>
+          <td>
+            8
+          </td>
+          <td>
+            Cheese snack
+          </td>
+          <td>
+            
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2
+            .
+          </td>
+          <td>
+            7
+          </td>
+          <td>
+            Guacamole
+          </td>
+          <td>
+            Gluten-free, Vegan
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 `;
 
