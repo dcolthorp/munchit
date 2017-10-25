@@ -1,6 +1,25 @@
 import * as React from "react";
 
-export const SnackReportUI: React.SFC = props => {
+export interface SnackReportRow {
+  place: number;
+  votes: number;
+  name: string;
+  tags: string[];
+}
+
+export interface SnackReportUIProps {
+  rows: SnackReportRow[];
+}
+
+export const SnackReportUI: React.SFC<SnackReportUIProps> = props => {
+  const rows = props.rows.map((row, i) => (
+    <tr key={i}>
+      <td>{row.place}.</td>
+      <td>{row.votes}</td>
+      <td>{row.name}</td>
+      <td>{row.tags.join(", ")}</td>
+    </tr>
+  ));
   return (
     <div className="snack-report">
       <table>
@@ -12,20 +31,7 @@ export const SnackReportUI: React.SFC = props => {
             <th>Tags</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1.</td>
-            <td>8</td>
-            <td>Cheese snack</td>
-            <td />
-          </tr>
-          <tr>
-            <td>2.</td>
-            <td>7</td>
-            <td>Guacamole</td>
-            <td>Gluten-free, Vegan</td>
-          </tr>
-        </tbody>
+        <tbody>{rows}</tbody>
       </table>
     </div>
   );

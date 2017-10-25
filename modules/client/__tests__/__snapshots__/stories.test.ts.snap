@@ -308,7 +308,8 @@ exports[`Storyshots Page – Snack Report Example 1`] = `
     <tbody>
       <tr>
         <td>
-          1.
+          1
+          .
         </td>
         <td>
           8
@@ -316,11 +317,14 @@ exports[`Storyshots Page – Snack Report Example 1`] = `
         <td>
           Cheese snack
         </td>
-        <td />
+        <td>
+          
+        </td>
       </tr>
       <tr>
         <td>
-          2.
+          2
+          .
         </td>
         <td>
           7

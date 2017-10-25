@@ -3,5 +3,10 @@ import * as React from "react";
 import { SnackReportUI } from "./snack-report-ui";
 
 storiesOf("Page – Snack Report", module).add("Example", () => (
-  <SnackReportUI />
+  <SnackReportUI
+    rows={[
+      { name: "Cheese snack", votes: 8, place: 1, tags: [] },
+      { name: "Guacamole", place: 2, votes: 7, tags: ["Gluten-free", "Vegan"] }
+    ]}
+  />
 ));
