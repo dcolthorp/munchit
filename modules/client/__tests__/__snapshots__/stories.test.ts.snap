@@ -284,6 +284,14 @@ exports[`Storyshots Page – Home Percentage 1`] = `
 </div>
 `;
 
+exports[`Storyshots Page – Snack Report Empty 1`] = `
+<div
+  className="snack-report"
+>
+  No snacks to show.
+</div>
+`;
+
 exports[`Storyshots Page – Snack Report Example 1`] = `
 <div
   className="snack-report"
@@ -338,5 +346,13 @@ exports[`Storyshots Page – Snack Report Example 1`] = `
       </tr>
     </tbody>
   </table>
+</div>
+`;
+
+exports[`Storyshots Page – Snack Report Loading 1`] = `
+<div
+  className="snack-report"
+>
+  Loading...
 </div>
 `;
