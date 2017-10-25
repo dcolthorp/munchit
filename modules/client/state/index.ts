@@ -24,5 +24,5 @@ export const DEFAULT: State = {
   router: undefined as any, // provided at startup
   apollo: undefined as any, // provided at startup
   popularityMode: PopularityMode.PERCENTAGE,
-  selectedTags: TagSet.add(TagSet.EMPTY, "Vegan")
+  selectedTags: TagSet.EMPTY
 };

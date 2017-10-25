@@ -4,6 +4,8 @@ import * as React from "react";
 import { SnackReportPage } from "client/pages/snack-report";
 import { sleep } from "helpers";
 import { MockList } from "graphql-tools";
+import * as State from "client/state";
+import * as TagSet from "core/tag-set";
 
 describe("Snack Report", () => {
   it("Begins in a loading state", () => {
@@ -69,7 +71,10 @@ describe("Snack Report", () => {
   });
 
   it("Shows and let's the user update selected tags", async () => {
-    const Provider = mockProvider();
+    const Provider = mockProvider({
+      initState: State.selectedTags.comp(TagSet.tagValue("Vegan")).set(true)
+    });
+
     const page = mount(
       <Provider>
         <SnackReportPage />
