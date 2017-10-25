@@ -6,7 +6,7 @@ export interface Query {
 }
 
 export interface TopSnacksQueryArgs {
-  tags: Array<string>;
+  tags: Array<string> | null;
 }
 
 export interface Snack {

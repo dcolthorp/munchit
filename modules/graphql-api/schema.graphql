@@ -12,7 +12,7 @@ type Vote {
 
 type Query {
   allSnacks: [Snack!]
-  topSnacks(tags: [String!]): [Snack!]
+  topSnacks(tags: [String]): [Snack!]
 }
 
 type Mutation {

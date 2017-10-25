@@ -2,11 +2,15 @@ import { SnackRepository } from "records/snack-record";
 import { getConnection, destroyConnection } from "db";
 import { VoteRepository } from "records/vote-record";
 import { truncateAll } from "__tests__/db-helpers";
+import { TagRepository } from "records/tag-record";
+import { TaggingRepository } from "records/tagging-record";
 
 describe("SnackRepository", () => {
   const knex = getConnection();
   let snackRepo = new SnackRepository(knex);
   let voteRepo = new VoteRepository(knex);
+  let tagRepo = new TagRepository(knex);
+  let taggingRepo = new TaggingRepository(knex);
 
   // WARNING: These tests all run in the same transaction,
   // so unique constraints can be violated between them.
@@ -53,5 +57,30 @@ describe("SnackRepository", () => {
 
     const voteSnack = await snackRepo.forVote.load(vote);
     expect(voteSnack.id).toEqual(snack.id);
+  });
+
+  it("Finds snacks by tag", async () => {
+    const [snack1, snack2] = await Promise.all([
+      snackRepo.insert({ name: "Qux" }),
+      snackRepo.insert({ name: "Quux" })
+    ]);
+
+    const [tag1, tag2] = await Promise.all([
+      tagRepo.insert({ name: "Delicious" }),
+      tagRepo.insert({ name: "Smokey" })
+    ]);
+
+    await Promise.all([
+      taggingRepo.insert({ snackId: snack1.id, tagId: tag1.id }),
+      taggingRepo.insert({ snackId: snack1.id, tagId: tag2.id }),
+      taggingRepo.insert({ snackId: snack2.id, tagId: tag1.id })
+    ]);
+
+    const matchingTags = await snackRepo.findWithTagsNamed([
+      "Delicious",
+      "Smokey"
+    ]);
+
+    expect(matchingTags.map(t => t.name)).toEqual(["Qux"]);
   });
 });

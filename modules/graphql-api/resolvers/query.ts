@@ -18,7 +18,10 @@ export const QueryResolvers = {
     args: TopSnacksQueryArgs,
     context: Context
   ): Promise<MinimalSnack[]> {
-    const snacks = await context.snackRepository.all();
+    let snacks = await context.snackRepository.findWithTagsNamed(
+      args.tags || []
+    );
+
     const votes = await context.voteRepository.countForSnack.loadMany(
       snacks.map(s => s.id)
     );
