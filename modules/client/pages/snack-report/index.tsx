@@ -5,6 +5,19 @@ import {
 } from "client/pages/snack-report/snack-report-ui";
 import { SnackReportQuery } from "client/graphql-types";
 import { graphql } from "react-apollo";
+import { connect, Dispatch } from "react-redux";
+import * as State from "client/state";
+import { AssertAssignable } from "helpers";
+
+type StateProps = Pick<SnackReportUIProps, "selectedTags">;
+type DispatchProps = Pick<SnackReportUIProps, "onTagChange">;
+type ReduxConnectedProps = StateProps & DispatchProps;
+type GraphQLProps = Pick<SnackReportUIProps, "rows">;
+
+type _check = AssertAssignable<
+  SnackReportUIProps,
+  ReduxConnectedProps & GraphQLProps
+>;
 
 export function dataToRows(data: SnackReportQuery): SnackReportRow[] {
   if (!data.topSnacks) {
@@ -19,26 +32,30 @@ export function dataToRows(data: SnackReportQuery): SnackReportRow[] {
   }));
 }
 
+function mapStateToProps(state: State.Type): StateProps {
+  return { selectedTags: state.selectedTags };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<any>): DispatchProps {
+  return {
+    onTagChange: (tag, value) => {}
+  };
+}
+
+const wireToRedux = connect(mapStateToProps, mapDispatchToProps);
+
 const wireToApollo = graphql<
   SnackReportQuery,
-  {},
+  ReduxConnectedProps,
   SnackReportUIProps
 >(require("client/graphql-queries/SnackReport.graphql"), {
-  props(result): SnackReportUIProps {
+  props(result): GraphQLProps {
     if (!result.data || result.data.loading) {
-      return {
-        rows: null,
-        onTagChange: () => {},
-        selectedTags: []
-      };
+      return { rows: null };
     } else {
-      return {
-        rows: dataToRows(result.data),
-        onTagChange: () => {},
-        selectedTags: ["Vegan"]
-      };
+      return { rows: dataToRows(result.data) };
     }
   }
 });
 
-export const SnackReportPage = wireToApollo(SnackReportUI);
+export const SnackReportPage = wireToRedux(wireToApollo(SnackReportUI));
