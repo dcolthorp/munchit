@@ -46,7 +46,8 @@ describe("Snack Report", () => {
             {
               id: 1,
               voteCount: 19,
-              name: "Pimento cheese"
+              name: "Pimento cheese",
+              tags: ["vegan"]
             }
           ]
         })
@@ -64,5 +65,6 @@ describe("Snack Report", () => {
     expect(page.text()).toContain("Pimento cheese");
     expect(page.text()).toContain("1.");
     expect(page.text()).toContain("19");
+    expect(page.text()).toContain("vegan");
   });
 });

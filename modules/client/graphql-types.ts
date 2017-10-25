@@ -42,5 +42,6 @@ export type SnackReportQuery = {
     id: number;
     name: string;
     voteCount: number;
+    tags: Array<string>;
   }> | null;
 };

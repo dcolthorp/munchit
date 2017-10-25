@@ -3,5 +3,6 @@ query SnackReport {
     id
     name
     voteCount
+    tags
   }
 }

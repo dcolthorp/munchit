@@ -17,12 +17,14 @@ describe("SnackReport.dataToRows", () => {
         {
           id: 29,
           name: "Cucumber sandwiches",
-          voteCount: 71
+          voteCount: 71,
+          tags: ["edible"]
         },
         {
           id: 79,
           name: "Falafel",
-          voteCount: 11
+          voteCount: 11,
+          tags: []
         }
       ]
     };
@@ -32,7 +34,7 @@ describe("SnackReport.dataToRows", () => {
         place: 1,
         name: "Cucumber sandwiches",
         votes: 71,
-        tags: []
+        tags: ["edible"]
       },
       {
         place: 2,

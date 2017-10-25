@@ -9,6 +9,7 @@ export interface Snack {
   id: number;
   name: string;
   voteCount: number;
+  tags: Array<string>;
 }
 
 export interface Mutation {

@@ -15,7 +15,7 @@ export function dataToRows(data: SnackReportQuery): SnackReportRow[] {
     place: index + 1,
     name: row.name,
     votes: row.voteCount,
-    tags: []
+    tags: row.tags
   }));
 }
 

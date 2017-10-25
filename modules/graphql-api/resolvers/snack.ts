@@ -17,5 +17,9 @@ export const SnackResolvers = {
 
   async voteCount(snack: MinimalSnack, args: {}, context: Context) {
     return await context.voteRepository.countForSnack.load(snack.id);
+  },
+
+  async tags(snack: MinimalSnack, args: {}, context: Context) {
+    return ["delicious"];
   }
 };

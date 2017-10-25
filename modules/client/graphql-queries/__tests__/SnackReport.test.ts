@@ -27,9 +27,11 @@ describe("query SnackReport", () => {
 
       expect(fooResult.name).toEqual("Foo");
       expect(fooResult.voteCount).toEqual(2);
+      expect(fooResult.tags).toEqual(["delicious"]);
 
       expect(barResult.name).toEqual("Bar");
       expect(barResult.voteCount).toEqual(1);
+      expect(barResult.tags).toEqual(["delicious"]);
     })
   );
 });

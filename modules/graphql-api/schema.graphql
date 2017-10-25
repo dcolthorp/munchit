@@ -2,6 +2,7 @@ type Snack {
   id: Int!
   name: String!
   voteCount: Int!
+  tags: [String!]!
 }
 
 type Vote {
