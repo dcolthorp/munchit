@@ -27,6 +27,8 @@ exports.up = async function(knex: Knex) {
       .foreign("tagId")
       .references("tags.id")
       .onDelete("CASCADE");
+
+    table.unique(["snackId", "tagId"]);
   });
 };
 

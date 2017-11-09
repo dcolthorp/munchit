@@ -57,7 +57,7 @@ const wireToApollo = graphql<
     const variables: SnackReportQueryVariables = {
       tags: props.selectedTags
     };
-    return { variables };
+    return { variables, fetchPolicy: "cache-and-network" };
   },
 
   props(result): GraphQLProps {

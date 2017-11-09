@@ -17,6 +17,7 @@ export const HomePageUI: React.SFC<HomePageUIProps> = props => {
   return (
     <div className="home-page">
       <h2>Snacks</h2>
+
       <SnackVoter
         snacks={snacks}
         onVote={onVote}
