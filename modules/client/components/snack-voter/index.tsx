@@ -14,10 +14,12 @@ export interface SnackVoterProps {
   readonly onVote: (snack: SnackVoteInfo) => void;
 }
 
-export const calcPopularityPercentage = (
-  snackVotes: number,
-  maxVotes: number
-): string => {
+type PopularityFunction = (vote: number, maxVotes: number) => string;
+
+export const calcPopularityPercentage: PopularityFunction = (
+  snackVotes,
+  maxVotes
+) => {
   const percentage =
     maxVotes <= 0 ? 100 : Math.round(100.0 * snackVotes / maxVotes);
   return `${percentage}%`;
@@ -39,10 +41,14 @@ export const SnackVoterEntry: React.SFC<SnackVoterEntryProps> = props => (
 export const SnackVoter: React.SFC<SnackVoterProps> = props => {
   const { snacks, onVote, popularityMode } = props;
 
-  const calcPopularity =
-    popularityMode === PopularityMode.PERCENTAGE
-      ? calcPopularityPercentage
-      : (count: number) => `${count} votes`;
+  const calcPopularity: PopularityFunction = (() => {
+    switch (popularityMode) {
+      case PopularityMode.PERCENTAGE:
+        return calcPopularityPercentage;
+      case PopularityMode.VOTE_COUNT:
+        return (count: number, maxVotes: number) => `${count} votes`;
+    }
+  })();
 
   let voteRows: JSX.Element | JSX.Element[];
   if (snacks === null) {

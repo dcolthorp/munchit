@@ -1,6 +1,6 @@
 import { calcPopularityPercentage } from "client/components/snack-voter";
 
-describe("calcPopularity", () => {
+describe("calcPopularityPercentage", () => {
   it("Returns 100 if the max vote count is 0", () => {
     expect(calcPopularityPercentage(0, 0)).toEqual("100%");
   });
