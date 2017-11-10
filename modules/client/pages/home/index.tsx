@@ -64,7 +64,7 @@ function mapDispatchToProps(
   };
 }
 /** Higher-order component that provides the `onVote` property to wrapped component */
-const connectedToRedux = connect<{}, DispatchProps, {}>(
+const connectedToRedux = connect<StateProps, DispatchProps, PropsWithApollo>(
   mapStateToProps,
   mapDispatchToProps
 );
