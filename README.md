@@ -1,3 +1,44 @@
+# Setup
+
+## Environment
+* Install Docker.app
+* Install Visual Studio Code.
+* Brew install
+	* node (8.x)
+	* yarn – make sure you’re on version 1.0 or later
+	* watchman
+
+## Try setting up the repo
+
+Make sure Docker is running, yarn is at least 1.0, node is at least 8.0, and you don't have postgres running in homebrew or another docker container.
+
+Clone `git@gitlab.atomicobject.com:colthorp/munchit.git`
+(Gitlab page: https://gitlab.atomicobject.com/colthorp/munchit)
+
+* Run `yarn`
+* Run `yarn db:up`. You should see postgres run.
+* In a new terminal, run:
+* `yarn db:create`
+* `yarn db:migrate:latest`
+* `yarn db:seed:run`
+* `NODE_ENV=test yarn db:migrate:latest`
+* Run `yarn test:unit` – the tests should pass.
+* Run `yarn dev` – you should be able to see munchit on localhost:3000. Try adding a snack and see it show up on the home page.
+
+## Suggested:
+* Install Chrome plugins
+	* [React Developer Tools - Chrome Web Store](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
+	* [Apollo Client Developer Tools - Chrome Web Store](https://chrome.google.com/webstore/detail/apollo-client-developer-t/jdkknkkbebbapilgoeccciglkfbmbnfm?hl=en)
+	* [Redux DevTools - Chrome Web Store](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
+* Suggested to install these VSCode plugins:
+	* GraphQL for VSCode
+	* Prettier – JavaScript formatter
+	* TSLint
+	* Vim (if desired)
+
+
+
+
 # SPA Starter Kit
 
 This starter kit is meant as a starting point for single-page webapps using TypeScript, React, Redux, and GraphQL that we use at Atomic Object. Feel free to clone this project and use it to seed any project for which it would be helpful.
